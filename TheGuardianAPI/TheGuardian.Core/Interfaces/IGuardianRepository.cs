@@ -14,7 +14,7 @@ namespace TheGuardian.Core.Interfaces
 
         Task<User> GetUserAsync(string email);
 
-        Task<User> PutUserAsync(User user);
+        Task<User> PutUserAsync(int id, User user);
 
         Task<User> PostUserAsync(User user);
 
@@ -24,7 +24,7 @@ namespace TheGuardian.Core.Interfaces
 
         Task<Hospital> GetHospitalAsync(int id);
 
-        Task<Hospital> PutHospitalAsync(Hospital hospital);
+        Task<Hospital> PutHospitalAsync(int id, Hospital hospital);
 
         Task<Hospital> PostHospitalAsync(Hospital hospital);
 
@@ -34,7 +34,7 @@ namespace TheGuardian.Core.Interfaces
 
         Task<Review> GetReviewAsync(int id);
 
-        Task<Review> PutReviewAsync(Review review);
+        Task<Review> PutReviewAsync(int id, Review review);
 
         Task<Review> PostReviewAsync(Review review);
 
@@ -42,11 +42,11 @@ namespace TheGuardian.Core.Interfaces
 
         Task<IEnumerable<Reason>> GetReasonsAsync();
 
-        Task<Review> GetReasonAsync(int id);
+        Task<Reason> GetReasonAsync(int id);
 
-        Task<Review> PutReasonAsync(Reason reason);
+        Task<Reason> PutReasonAsync(int id, Reason reason);
 
-        Task<Review> PostReasonAsync(Reason reason);
+        Task<Reason> PostReasonAsync(Reason reason);
 
         Task<bool> RemoveReasonAsync(int id);
 

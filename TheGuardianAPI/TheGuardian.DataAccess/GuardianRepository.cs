@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace TheGuardian.DataAccess
         /// </summary>
         /// <param name="hospital"></param>
         /// <returns>The hospital that was added</returns>
-        public async Task<Core.Models.Hospital> PutHospitalAsync(Core.Models.Hospital hospital)
+        public async Task<Core.Models.Hospital> PostHospitalAsync(Core.Models.Hospital hospital)
         {
             int id = await _dbContext.Hospitals.MaxAsync(h => h.Id) + 1; // Get max hospital id + 1 for the new hospital.
 
@@ -64,7 +65,7 @@ namespace TheGuardian.DataAccess
         /// </summary>
         /// <param name="review"></param>
         /// <returns>The review that was added</returns>
-        public async Task<Core.Models.Review> PutReviewAsync(Core.Models.Review review)
+        public async Task<Core.Models.Review> PostReviewAsync(Core.Models.Review review)
         {
             var reviewExists = await _dbContext.Reviews.FirstOrDefaultAsync(r => r.UserId == review.UserId && r.HospitalId == review.HospitalId);
             if (reviewExists != null)
@@ -109,7 +110,7 @@ namespace TheGuardian.DataAccess
         /// </summary>
         /// <param name="user"></param>
         /// <returns>The user that was added</returns>
-        public async Task<Core.Models.User> PutUserAsync(Core.Models.User user)
+        public async Task<Core.Models.User> PostUserAsync(Core.Models.User user)
         {
             var userExists = _dbContext.Users.FirstOrDefaultAsync(u => user.Email == u.Email);
             if (userExists != null)
@@ -158,7 +159,7 @@ namespace TheGuardian.DataAccess
                 _logger.LogInformation($"Hospital with id {id} not found.");
                 return null;
             }
-
+            _logger.LogInformation($"Fetched all hospital with id {id}.");
             return Mapper.MapHospital(hospital);
         }
 
@@ -170,7 +171,7 @@ namespace TheGuardian.DataAccess
         public async Task<IEnumerable<Core.Models.Hospital>> GetHospitalsAsync()
         {
             var hospitals = await _dbContext.Hospitals.Include(h => h.Reviews).ToListAsync();
-
+            _logger.LogInformation("Fetched all hospitals.");
             return hospitals.Select(Mapper.MapHospital);
         }
 
@@ -193,9 +194,16 @@ namespace TheGuardian.DataAccess
             return Mapper.MapReview(review);
         }
 
-        public Task<IEnumerable<Core.Models.Review>> GetReviewsAsync()
+        /// <summary>
+        /// Retreive all reviews with their hospitals and users.
+        /// from the DB
+        /// </summary>
+        /// <returns>A List of reviews</returns>
+        public async Task<IEnumerable<Core.Models.Review>> GetReviewsAsync()
         {
-            throw new NotImplementedException();
+            var reviews = await _dbContext.Reviews.Include(r => r.Hospital).Include(r => r.User).ToListAsync();
+            _logger.LogInformation("Fetched all reviews.");
+            return reviews.Select(Mapper.MapReview);
         }
 
         /// <summary>
@@ -208,6 +216,7 @@ namespace TheGuardian.DataAccess
             var user = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
+                _logger.LogInformation($"User with id {id} not found.");
                 return null;
             }
             _logger.LogInformation($"Fetched user with id {id}.");
@@ -224,70 +233,241 @@ namespace TheGuardian.DataAccess
             var user = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
+                _logger.LogInformation($"User with email {email} not found.");
                 return null;
             }
             _logger.LogInformation($"Fetched user with email {email}.");
             return Mapper.MapUser(user);
         }
 
-        public Task<IEnumerable<Core.Models.User>> GetUsersAsync()
+        /// <summary>
+        /// Retreiving all users with their reviews
+        /// from the DB
+        /// </summary>
+        /// <returns>A List of users</returns>
+        public async Task<IEnumerable<Core.Models.User>> GetUsersAsync()
         {
-            throw new NotImplementedException();
+            var users = await _dbContext.Users.Include(u => u.Reviews).ToListAsync();
+            _logger.LogInformation("Fetched all users.");
+            return users.Select(Mapper.MapUser);
         }
 
-        public Task<bool> RemoveHospitalAsync(int id)
+        /// <summary>
+        /// Removing Hospital and associated reviews from DB based on ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A bool based on success/failure</returns>
+        public async Task<bool> RemoveHospitalAsync(int id)
         {
-            throw new NotImplementedException();
+            var hospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == id);
+            if (hospital == null)
+            {
+                _logger.LogInformation($"Hospital with id {id} not found.");
+                return false;
+            }
+            _logger.LogInformation($"Removing hospital with id {id} and all associated reviews from the DB.");
+            foreach (var review in hospital.Reviews)
+            {
+                _dbContext.Remove(review);
+            }
+            _dbContext.Remove(hospital);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public Task<bool> RemoveReviewAsync(int id)
+        /// <summary>
+        /// Removing  Review from DB based on ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A bool based on success/failure</returns>
+        public async Task<bool> RemoveReviewAsync(int id)
         {
-            throw new NotImplementedException();
+            var review = await _dbContext.Reviews.FirstOrDefaultAsync(r => r.Id == id);
+            if (review == null)
+            {
+                _logger.LogInformation($"Review with id {id} not found.");
+                return false;
+            }
+            _logger.LogInformation($"Removing review with {id} from the DB.");
+            _dbContext.Remove(review);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public Task<bool> RemoveUserAsync(int id)
+        /// <summary>
+        /// Removing User and associated reviews from DB based on ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A bool based on success/failure</returns>
+        public async Task<bool> RemoveUserAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.Users.Include(h => h.Reviews).FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                _logger.LogInformation($"User with id {id} not found.");
+                return false;
+            }
+            _logger.LogInformation($"Removing user with id {id} and all associated reviews from the DB.");
+            foreach (var review in user.Reviews)
+            {
+                _dbContext.Remove(review);
+            }
+            _dbContext.Remove(user);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public Task<Core.Models.User> PostUserAsync(Core.Models.User user)
+        /// <summary>
+        /// Update a user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="users"></param>
+        /// <returns>Returns the user after updated</returns>
+        public async Task<Core.Models.User> PutUserAsync(int id, Core.Models.User user)
         {
-            throw new NotImplementedException();
+            var userExists = await _dbContext.Users.FindAsync(id);
+            if (userExists == null)
+            {
+                _logger.LogInformation($"Unable to update user with id {id} because it was not found.");
+                return null;
+            }
+            _logger.LogInformation($"Updating user with id {id}.");
+            _dbContext.Entry(userExists).CurrentValues.SetValues(user);
+            await _dbContext.SaveChangesAsync();
+            return user;
         }
 
-        public Task<Core.Models.Hospital> PostHospitalAsync(Core.Models.Hospital hospital)
+        /// <summary>
+        /// Update a hospital
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="hospital"></param>
+        /// <returns>Returns the hospital after updated</returns>
+        public async Task<Core.Models.Hospital> PutHospitalAsync(int id, Core.Models.Hospital hospital)
         {
-            throw new NotImplementedException();
+            var hospitalExists = await _dbContext.Hospitals.FindAsync(id);
+            if (hospitalExists == null)
+            {
+                _logger.LogInformation($"Unable to update hospital with id {id} because it was not found.");
+                return null;
+            }
+            _logger.LogInformation($"Updating hospital with id {id}.");
+            _dbContext.Entry(hospitalExists).CurrentValues.SetValues(hospital);
+            await _dbContext.SaveChangesAsync();
+            return hospital;
         }
 
-        public Task<Core.Models.Review> PostReviewAsync(Core.Models.Review review)
+        /// <summary>
+        /// Update a review
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="review"></param>
+        /// <returns>Returns the review after updated</returns>
+        public async Task<Core.Models.Review> PutReviewAsync(int id, Core.Models.Review review)
         {
-            throw new NotImplementedException();
+            var reviewExists = await _dbContext.Reviews.FindAsync(id);
+            if (reviewExists == null)
+            {
+                _logger.LogInformation($"Unable to update review with id {id} because it was not found.");
+                return null;
+            }
+            _logger.LogInformation($"Updating review with id {id}.");
+            _dbContext.Entry(reviewExists).CurrentValues.SetValues(review);
+            await _dbContext.SaveChangesAsync();
+            return review;
         }
 
-        public Task<IEnumerable<Core.Models.Reason>> GetReasonsAsync()
+        /// <summary>
+        /// Retreiving all reasons from the DB
+        /// </summary>
+        /// <returns>A List of reasons</returns>
+        public async Task<IEnumerable<Core.Models.Reason>> GetReasonsAsync()
         {
-            throw new NotImplementedException();
+            var reasons = await _dbContext.Reasons.ToListAsync();
+            _logger.LogInformation("Fetched all reasons.");
+            return reasons.Select(Mapper.MapReason);
         }
 
-        public Task<Core.Models.Review> GetReasonAsync(int id)
+        /// <summary>
+        /// Retreives a reason based on id from the DB
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A reason</returns>
+        public async Task<Core.Models.Reason> GetReasonAsync(int id)
         {
-            throw new NotImplementedException();
+            var reason = await _dbContext.Reasons.FirstOrDefaultAsync(r => r.Id == id);
+            if (reason == null)
+            {
+                _logger.LogInformation($"Reason with id {id} not found.");
+                return null;
+            }
+            _logger.LogInformation($"Fetched reason with id {id}.");
+            return Mapper.MapReason(reason);
         }
 
-        public Task<Core.Models.Review> PutReasonAsync(Core.Models.Reason reason)
+        /// <summary>
+        /// Update a reason
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        /// <returns>Returns the reason after updated</returns>
+        public async Task<Core.Models.Reason> PutReasonAsync(int id, Core.Models.Reason reason)
         {
-            throw new NotImplementedException();
+            var reasonExists = await _dbContext.Reasons.FindAsync(id);
+            if (reasonExists == null)
+            {
+                _logger.LogInformation($"Unable to update reason with id {id} because it was not found.");
+                return null;
+            }
+            _logger.LogInformation($"Updating reason with id {id}.");
+            _dbContext.Entry(reasonExists).CurrentValues.SetValues(reason);
+            await _dbContext.SaveChangesAsync();
+            return reason;
         }
 
-        public Task<Core.Models.Review> PostReasonAsync(Core.Models.Reason reason)
+        /// <summary>
+        /// Adds a new reason to the DB
+        /// </summary>
+        /// <param name="reason"></param>
+        /// <returns>The reason added</returns>
+        public async Task<Core.Models.Reason> PostReasonAsync(Core.Models.Reason reason)
         {
-            throw new NotImplementedException();
+            int id = await _dbContext.Reasons.MaxAsync(h => h.Id) + 1; // Get max reason id + 1 for the new reason.
+
+            var newReason = new Reason
+            {
+                Id = id,
+                ReasonDescription = reason.ReasonDescription
+            };
+
+            _logger.LogInformation($"Added reason with description {reason.ReasonDescription} to DB.");
+
+            _dbContext.Reasons.Add(newReason);
+            await _dbContext.SaveChangesAsync();
+
+            int nid = await _dbContext.Reasons.MaxAsync(r => r.Id);
+            var nh = await _dbContext.Reasons.FirstOrDefaultAsync(r => r.Id == nid);
+
+            return Mapper.MapReason(nh);
         }
 
-        public Task<bool> RemoveReasonAsync(int id)
+        /// <summary>
+        /// Removing Reason from DB based on ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A bool based on success/failure</returns>
+        public async Task<bool> RemoveReasonAsync(int id)
         {
-            throw new NotImplementedException();
+            var reason = await _dbContext.Reasons.FirstOrDefaultAsync(r => r.Id == id);
+            if (reason== null)
+            {
+                _logger.LogInformation($"Reason with id {id} not found.");
+                return false;
+            }
+            _logger.LogInformation($"Removing reason with {id} from the DB.");
+            _dbContext.Remove(reason);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace TheGuardian.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<Hospital> Hospitals { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Reason> Reasons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
