@@ -35,11 +35,8 @@ namespace TheGuardian.DataAccess
         /// <returns>The hospital that was added</returns>
         public async Task<Core.Models.Hospital> PostHospitalAsync(Core.Models.Hospital hospital)
         {
-            int id = await _dbContext.Hospitals.MaxAsync(h => h.Id) + 1; // Get max hospital id + 1 for the new hospital.
-
             var newHospital = new Hospital
             {
-                Id = id,
                 Name = hospital.Name,
                 Address = hospital.Address,
                 City = hospital.City,
@@ -74,11 +71,8 @@ namespace TheGuardian.DataAccess
                 return null;
             }
 
-            int id = await _dbContext.Reviews.MaxAsync(h => h.Id) + 1; // Get max review id + 1 for the new review.
-
             Review newReview = new Review
             {
-                Id = id,
                 UserId = review.UserId,
                 HospitalId = review.HospitalId,
                 MedicalStaffRating = review.MedicalStaffRating,
@@ -118,11 +112,9 @@ namespace TheGuardian.DataAccess
                 _logger.LogInformation($"User with email {user.Email} already exists.");
                 return null;
             }
-            int id = await _dbContext.Users.MaxAsync(h => h.Id) + 1; // Get max user id + 1 for the new user.
 
             User newUser = new User
             {
-                Id = id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -432,11 +424,8 @@ namespace TheGuardian.DataAccess
         /// <returns>The reason added</returns>
         public async Task<Core.Models.Reason> PostReasonAsync(Core.Models.Reason reason)
         {
-            int id = await _dbContext.Reasons.MaxAsync(h => h.Id) + 1; // Get max reason id + 1 for the new reason.
-
             var newReason = new Reason
             {
-                Id = id,
                 ReasonDescription = reason.ReasonDescription
             };
 

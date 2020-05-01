@@ -24,6 +24,11 @@ namespace TheGuardian.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Reason>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ReasonDescription).HasMaxLength(200);
+            });
 
             modelBuilder.Entity<User>(entity =>
             {
@@ -38,8 +43,8 @@ namespace TheGuardian.DataAccess
                 entity.Property(u => u.Zip).IsRequired();
                 entity.Property(u => u.AccessLevel).HasDefaultValue("User");
                 entity.Property(r => r.AccountDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasColumnType("timestamp")
+                    .HasDefaultValueSql("now()");
                 entity.Property(u => u.AccountVerified).HasDefaultValue(false);
             });
             
@@ -59,20 +64,16 @@ namespace TheGuardian.DataAccess
             {
                 entity.HasKey(r => r.Id);
                 entity.Property(r => r.DateAdmittance)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                    .HasColumnType("timestamp");
+                entity.Property(r => r.DateSubmitted)
+                    .HasColumnType("timestamp")
+                    .HasDefaultValueSql("now()");
                 entity.HasOne(r => r.Hospital).WithMany(h => h.Reviews).HasForeignKey(r => r.HospitalId);
                 entity.HasOne(r => r.User).WithMany(u => u.Reviews).HasForeignKey(r => r.UserId);
                 entity.Property(r => r.MedicalStaffRating).IsRequired();
                 entity.Property(r => r.ClericalStaffRating).IsRequired();
                 entity.Property(r => r.FacilityRating).IsRequired();
-                entity.Property(r => r.Reason).HasMaxLength(500);
-            });
-
-            modelBuilder.Entity<Reason>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.ReasonDescription).HasMaxLength(200);
+                entity.HasOne(r => r.Reason);
             });
 
             OnModelCreatingPartial(modelBuilder);

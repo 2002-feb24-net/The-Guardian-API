@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using TheGuardian.Api.Models;
 using TheGuardian.Core.Interfaces;
 using TheGuardian.DataAccess;
 
@@ -33,7 +33,7 @@ namespace TheGuardianAPI
         {
             services.AddApplicationInsightsTelemetry();
 
-            services.AddDbContext<GuardianContext>(options => options.UseSqlServer(Configuration.GetConnectionString("GuardianDb")));
+            services.AddDbContext<GuardianContext>(options => options.UseNpgsql(Configuration.GetConnectionString("GuardianDb")));
 
             services.AddScoped<IGuardianRepository, GuardianRepository>();
 
