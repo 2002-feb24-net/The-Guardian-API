@@ -24,7 +24,9 @@ namespace TheGuardian.Core.Models
 
         public string WrittenFeedback { get; set; }
 
-        public string Reason { get; set; }
+        public int ReasonId { get; set; }
+
+        public Reason Reason { get; set; }
 
         public DateTime DateSubmitted { get; set; }
 

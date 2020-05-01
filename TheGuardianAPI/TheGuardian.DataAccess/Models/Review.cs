@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TheGuardian.Api.Models
+namespace TheGuardian.DataAccess
 {
     public class Review
     {
@@ -32,7 +32,7 @@ namespace TheGuardian.Api.Models
         public int ReasonId { get; set; }
 
         public Reason Reason { get; set; }
-        
+
         public User User { get; set; }
 
         public Hospital Hospital { get; set; }

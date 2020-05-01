@@ -6,7 +6,7 @@ using TheGuardian.Core.Models;
 
 namespace TheGuardian.Core.Interfaces
 {
-    interface IGuardianRepository
+    public interface IGuardianRepository
     {
         Task<IEnumerable<User>> GetUsersAsync();
 
@@ -14,7 +14,9 @@ namespace TheGuardian.Core.Interfaces
 
         Task<User> GetUserAsync(string email);
 
-        Task<User> AddUserAsync(User user);
+        Task<User> PutUserAsync(int id, User user);
+
+        Task<User> PostUserAsync(User user);
 
         Task<bool> RemoveUserAsync(int id);
 
@@ -22,7 +24,9 @@ namespace TheGuardian.Core.Interfaces
 
         Task<Hospital> GetHospitalAsync(int id);
 
-        Task<Hospital> AddHospitalAsync(Hospital hospital);
+        Task<Hospital> PutHospitalAsync(int id, Hospital hospital);
+
+        Task<Hospital> PostHospitalAsync(Hospital hospital);
 
         Task<bool> RemoveHospitalAsync(int id);
 
@@ -30,9 +34,21 @@ namespace TheGuardian.Core.Interfaces
 
         Task<Review> GetReviewAsync(int id);
 
-        Task<Review> AddReviewAsync(Review review);
+        Task<Review> PutReviewAsync(int id, Review review);
+
+        Task<Review> PostReviewAsync(Review review);
 
         Task<bool> RemoveReviewAsync(int id);
+
+        Task<IEnumerable<Reason>> GetReasonsAsync();
+
+        Task<Reason> GetReasonAsync(int id);
+
+        Task<Reason> PutReasonAsync(int id, Reason reason);
+
+        Task<Reason> PostReasonAsync(Reason reason);
+
+        Task<bool> RemoveReasonAsync(int id);
 
     }
 }

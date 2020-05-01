@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TheGuardian.Core.Models
+namespace TheGuardian.DataAccess
 {
     public class User
     {
@@ -13,6 +13,7 @@ namespace TheGuardian.Core.Models
             Reviews = new HashSet<Review>();
         }
 
+        [Key]
         public int Id { get; set; }
 
         public string FirstName { get; set; }
