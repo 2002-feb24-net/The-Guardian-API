@@ -17,9 +17,7 @@ namespace TheGuardian.Core.Models
 
         public string Name { get; set; }
 
-        public int StreetNum { get; set; }
-
-        public string StreetName { get; set; }
+        public string Address { get; set; }
 
         public string City { get; set; }
 
@@ -27,13 +25,37 @@ namespace TheGuardian.Core.Models
 
         public int Zip { get; set; }
 
+        public string Phone { get; set; }
+
+        public string Website { get; set; }
+
         public double AggMedicalStaffRating { get; set; }
 
         public double AggClericalStaffRating { get; set; }
+
+        public double AggFacilityRating { get; set; }
 
         public double AggOverallRating { get; set; }
 
         public ICollection<Review> Reviews { get; set; }
 
+        public void UpdateAggregateRatings()
+        {
+            double aggMedRating = 0, aggCleRating = 0, aggFacRating = 0;
+            foreach (var review in Reviews)
+            {
+                aggMedRating += review.MedicalStaffRating;
+                aggCleRating += review.ClericalStaffRating;
+                aggFacRating += review.FacilityRating;
+            }
+            aggMedRating /= Reviews.Count;
+            aggCleRating /= Reviews.Count;
+            aggFacRating /= Reviews.Count;
+
+            AggMedicalStaffRating = aggMedRating;
+            AggClericalStaffRating = aggCleRating;
+            AggFacilityRating = aggFacRating;
+            AggOverallRating = (aggMedRating + aggCleRating + aggFacRating) / 3;
+        }
     }
 }

@@ -24,9 +24,19 @@ namespace TheGuardian.Api.Models
 
         public string Password { get; set; }
 
-        public int ZipCode { get; set; }
+        public string Address { get; set; }
+
+        public string City { get; set; }
+
+        public string State { get; set; }
+
+        public int Zip { get; set; }
 
         public string AccessLevel { get; set; }
+
+        public bool AccountVerified { get; set; }
+
+        public DateTime AccountDate { get; set; }
 
         public ICollection<Review> Reviews { get; set; }
     }
