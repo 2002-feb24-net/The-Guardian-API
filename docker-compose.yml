@@ -3,8 +3,10 @@ version: '3.7'
 services:
 
   web:
-    build: TheGuardianAPI
-    image: 2002-notes-api:1.0
+    build:
+      context: TheGuardianAPI
+      dockerfile: api.dockerfile
+    image: theguardianapi:v2
     depends_on:
       - data
     ports:
@@ -13,20 +15,21 @@ services:
       - default
     environment:
       DatabaseConnection: GuardianPostgreSqlDockerCompose
-      ConnectionStrings__GuardianPostgreSqlDockerCompose: Host=data;Database=Guardian;Username=postgres;Password=R3vTra1n1ng
-      EnsureDatabaseCreated: 'true'
+      ConnectionStrings__GuardianPostgreSqlDockerCompose: Host=data;Username=postgres;Password=R3vTra1n1ng
       CorsOrigins__0: http://localhost:4200
       CorsOrigins__1: http://192.168.99.100:4200
       UseHttpsRedirection: 'false'
 
   data:
-    image: postgres:12.0
+    build:
+      context: TheGuardianAPI
+      dockerfile: db.dockerfile
+    image: anvelez26/theguardianapi:v2
     ports:
       - 5432:5432
     networks:
       - default
-    environment:
-      POSTGRES_PASSWORD: R3vTra1n1ng
+
 
 networks:
   default:

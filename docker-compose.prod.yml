@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+
+  web:
+    build: TheGuardianAPI
+    image: anvelez26/theguardianangular:v2
+    depends_on:
+      - data
+    ports:
+      - 8000:80
+    networks:
+      - default
+    environment:
+      DatabaseConnection: GuardianPostgreSql
+      ConnectionStrings__NotesDbPostgreSql: Host=data;Database=Guardian;Username=postgres;Password=R3vTra1n1ng
+      EnsureDatabaseCreated: 'true'
+      CorsOrigins__0: http://localhost:4200
+      CorsOrigins__1: http://192.168.99.100:4200
+      CorsOrigins__2: https://theguardian.azurewebsites.net
+      CorsOrigins__3: http://theguardian.azurewebsites.net
+      UseHttpsRedirection: 'false'
+
+  data:
+    image: postgres:12.0
+    networks:
+      - default
+    environment:
+      POSTGRES_PASSWORD: R3vTra1n1ng
+
+networks:
+  default:
