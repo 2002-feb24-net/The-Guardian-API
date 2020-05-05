@@ -4,7 +4,7 @@ services:
 
   web:
     build: TheGuardianAPI
-    image: anvelez26/theguardianangular:v2
+    image: anvelez26/theguardianapi:1.0
     depends_on:
       - data
     ports:

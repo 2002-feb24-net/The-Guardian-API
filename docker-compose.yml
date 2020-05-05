@@ -6,7 +6,7 @@ services:
     build:
       context: TheGuardianAPI
       dockerfile: api.dockerfile
-    image: theguardianapi:v2
+    image: theguardianapi:1.0
     depends_on:
       - data
     ports:
@@ -24,7 +24,7 @@ services:
     build:
       context: TheGuardianAPI
       dockerfile: db.dockerfile
-    image: anvelez26/theguardianapi:v2
+    image: anvelez26/theguardianapi:1.0
     ports:
       - 5432:5432
     networks:

@@ -33,7 +33,7 @@ namespace TheGuardianAPI
         {
             services.AddApplicationInsightsTelemetry();
 
-            services.AddDbContext<GuardianContext>(options => options.UseNpgsql(Configuration.GetConnectionString("GuardianDb")));
+            services.AddDbContext<GuardianContext>(options => options.UseNpgsql(Configuration.GetConnectionString("GuardianDbPostgreSqlDockerDesktop")));
 
             services.AddScoped<IGuardianRepository, GuardianRepository>();
 
@@ -45,9 +45,9 @@ namespace TheGuardianAPI
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowLocalAndAppServiceAngular", builder =>
-                    builder.WithOrigins("http://localhost:4200")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+                   builder.WithOrigins("http://localhost:4200")
+                   .AllowAnyMethod()
+                   .AllowAnyHeader());
             });
 
             services.AddControllers(options =>
