@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TheGuardian.Core.Interfaces;
 using TheGuardian.DataAccess;
 
 namespace TheGuardian.Api.Controllers
@@ -13,97 +14,88 @@ namespace TheGuardian.Api.Controllers
     [ApiController]
     public class HospitalsController : ControllerBase
     {
-        private readonly GuardianContext _context;
+        private readonly IGuardianRepository guardianRepo;
 
-        public HospitalsController(GuardianContext context)
+        public HospitalsController(IGuardianRepository guardianRepository)
         {
-            _context = context;
+            this.guardianRepo = guardianRepository;
         }
 
         // GET: api/Hospitals
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Hospital>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Hospital>>> GetHospitals()
         {
-            return await _context.Hospitals.ToListAsync();
+            IEnumerable<Core.Models.Hospital> hospitals = await guardianRepo.GetHospitalsAsync();
+            return Ok(hospitals);
         }
 
         // GET: api/Hospitals/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Hospital), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Hospital>> GetHospital(int id)
         {
-            var hospital = await _context.Hospitals.FindAsync(id);
-
+            var hospital = await guardianRepo.GetHospitalAsync(id);
             if (hospital == null)
             {
-                return NotFound();
+                return NotFound($"Hospital with ID {id} does not exist.");
             }
-
-            return hospital;
+            return Ok(hospital);
         }
 
         // PUT: api/Hospitals/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(Hospital), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PutHospital(int id, Hospital hospital)
         {
             if (id != hospital.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(hospital).State = EntityState.Modified;
-
-            try
+            var hosp = await guardianRepo.PutHospitalAsync(id, Mapper.MapHospital(hospital));
+            if (hosp is null)
             {
-                await _context.SaveChangesAsync();
+                return BadRequest($"Hospital with ID {id} does not exist.");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HospitalExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok($"Hospital with ID {id} was successfully updated.");
         }
 
         // POST: api/Hospitals
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [ProducesResponseType(typeof(Hospital), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Hospital>> PostHospital(Hospital hospital)
         {
-            _context.Hospitals.Add(hospital);
-            await _context.SaveChangesAsync();
-
+            var addedHospital = await guardianRepo.PostHospitalAsync(Mapper.MapHospital(hospital));
+            if (addedHospital is null)
+            {
+                return BadRequest($"That hospital already exists.");
+            }
             return CreatedAtAction("GetHospital", new { id = hospital.Id }, hospital);
         }
 
         // DELETE: api/Hospitals/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(Hospital), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Hospital>> DeleteHospital(int id)
         {
-            var hospital = await _context.Hospitals.FindAsync(id);
-            if (hospital == null)
+            if (await guardianRepo.RemoveHospitalAsync(id))
             {
-                return NotFound();
+                return NotFound($"Hospital with {id} doesn't exist.");
             }
-
-            _context.Hospitals.Remove(hospital);
-            await _context.SaveChangesAsync();
-
-            return hospital;
-        }
-
-        private bool HospitalExists(int id)
-        {
-            return _context.Hospitals.Any(e => e.Id == id);
+            return Ok($"Hospital with id {id} was successfully deleted.");
         }
     }
 }
