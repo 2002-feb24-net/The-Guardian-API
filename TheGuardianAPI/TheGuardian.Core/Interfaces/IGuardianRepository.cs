@@ -40,15 +40,5 @@ namespace TheGuardian.Core.Interfaces
 
         Task<bool> RemoveReviewAsync(int id);
 
-        Task<IEnumerable<Reason>> GetReasonsAsync();
-
-        Task<Reason> GetReasonAsync(int id);
-
-        Task<Reason> PutReasonAsync(int id, Reason reason);
-
-        Task<Reason> PostReasonAsync(Reason reason);
-
-        Task<bool> RemoveReasonAsync(int id);
-
     }
 }

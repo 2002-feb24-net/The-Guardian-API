@@ -29,9 +29,7 @@ namespace TheGuardian.DataAccess
 
         public DateTime DateAdmittance { get; set; }
 
-        public int ReasonId { get; set; }
-
-        public Reason Reason { get; set; }
+        public string Reason { get; set; }
 
         public User User { get; set; }
 

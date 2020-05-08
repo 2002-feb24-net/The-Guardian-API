@@ -61,19 +61,9 @@ namespace TheGuardian.DataAccess
                 WrittenFeedback = review.WrittenFeedback,
                 DateSubmitted = review.DateSubmitted,
                 DateAdmittance = review.DateAdmittance,
-                ReasonId = review.ReasonId,
-                Reason = MapReason(review.Reason),
+                Reason = review.Reason,
                 User = MapUser(review.User),
                 Hospital = MapHospital(review.Hospital)
-            };
-        }
-
-        public static Core.Models.Reason MapReason(Reason reason)
-        {
-            return new Core.Models.Reason
-            {
-                Id = reason.Id,
-                ReasonDescription = reason.ReasonDescription
             };
         }
     }

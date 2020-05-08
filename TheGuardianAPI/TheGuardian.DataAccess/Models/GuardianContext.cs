@@ -20,16 +20,9 @@ namespace TheGuardian.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<Hospital> Hospitals { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Reason> Reasons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Reason>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.ReasonDescription).HasMaxLength(200);
-            });
-
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(u => u.Id);
@@ -39,9 +32,9 @@ namespace TheGuardian.DataAccess
                 entity.Property(u => u.Password).IsRequired().HasMaxLength(20);
                 entity.Property(u => u.Address).IsRequired().HasMaxLength(100);
                 entity.Property(u => u.City).IsRequired().HasMaxLength(100);
-                entity.Property(u => u.State).IsRequired().HasMaxLength(30);
+                entity.Property(u => u.State).IsRequired().HasMaxLength(2);
                 entity.Property(u => u.Zip).IsRequired();
-                entity.Property(u => u.AccessLevel).HasDefaultValue("User");
+                entity.Property(u => u.AccessLevel).HasDefaultValue(false);
                 entity.Property(r => r.AccountDate)
                     .HasColumnType("timestamp")
                     .HasDefaultValueSql("now()");
@@ -54,9 +47,9 @@ namespace TheGuardian.DataAccess
                 entity.Property(h => h.Name).IsRequired().HasMaxLength(30);
                 entity.Property(h => h.Address).IsRequired().HasMaxLength(100);
                 entity.Property(h => h.City).IsRequired().HasMaxLength(100);
-                entity.Property(h => h.State).IsRequired().HasMaxLength(30);
+                entity.Property(h => h.State).IsRequired().HasMaxLength(2);
                 entity.Property(h => h.Zip).IsRequired();
-                entity.Property(h => h.Phone).IsRequired().HasMaxLength(20);
+                entity.Property(h => h.Phone).IsRequired().HasMaxLength(15);
                 entity.Property(h => h.Website).IsRequired().HasMaxLength(100);
             });
             
@@ -73,7 +66,8 @@ namespace TheGuardian.DataAccess
                 entity.Property(r => r.MedicalStaffRating).IsRequired();
                 entity.Property(r => r.ClericalStaffRating).IsRequired();
                 entity.Property(r => r.FacilityRating).IsRequired();
-                entity.HasOne(r => r.Reason);
+                entity.Property(r => r.WrittenFeedback).IsRequired().HasMaxLength(500);
+                entity.Property(r => r.Reason).IsRequired().HasMaxLength(20);
             });
 
             OnModelCreatingPartial(modelBuilder);

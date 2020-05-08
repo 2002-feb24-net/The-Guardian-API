@@ -80,7 +80,7 @@ namespace TheGuardian.DataAccess
                 FacilityRating = review.FacilityRating,
                 OverallRating = review.OverallRating,
                 WrittenFeedback = review.WrittenFeedback,
-                ReasonId = review.ReasonId,
+                Reason = review.Reason,
                 DateAdmittance = review.DateAdmittance
             };
 
@@ -367,96 +367,6 @@ namespace TheGuardian.DataAccess
             _dbContext.Entry(reviewExists).CurrentValues.SetValues(review);
             await _dbContext.SaveChangesAsync();
             return review;
-        }
-
-        /// <summary>
-        /// Retreiving all reasons from the DB
-        /// </summary>
-        /// <returns>A List of reasons</returns>
-        public async Task<IEnumerable<Core.Models.Reason>> GetReasonsAsync()
-        {
-            var reasons = await _dbContext.Reasons.ToListAsync();
-            _logger.LogInformation("Fetched all reasons.");
-            return reasons.Select(Mapper.MapReason);
-        }
-
-        /// <summary>
-        /// Retreives a reason based on id from the DB
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A reason</returns>
-        public async Task<Core.Models.Reason> GetReasonAsync(int id)
-        {
-            var reason = await _dbContext.Reasons.FirstOrDefaultAsync(r => r.Id == id);
-            if (reason == null)
-            {
-                _logger.LogInformation($"Reason with id {id} not found.");
-                return null;
-            }
-            _logger.LogInformation($"Fetched reason with id {id}.");
-            return Mapper.MapReason(reason);
-        }
-
-        /// <summary>
-        /// Update a reason
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="reason"></param>
-        /// <returns>Returns the reason after updated</returns>
-        public async Task<Core.Models.Reason> PutReasonAsync(int id, Core.Models.Reason reason)
-        {
-            var reasonExists = await _dbContext.Reasons.FindAsync(id);
-            if (reasonExists == null)
-            {
-                _logger.LogInformation($"Unable to update reason with id {id} because it was not found.");
-                return null;
-            }
-            _logger.LogInformation($"Updating reason with id {id}.");
-            _dbContext.Entry(reasonExists).CurrentValues.SetValues(reason);
-            await _dbContext.SaveChangesAsync();
-            return reason;
-        }
-
-        /// <summary>
-        /// Adds a new reason to the DB
-        /// </summary>
-        /// <param name="reason"></param>
-        /// <returns>The reason added</returns>
-        public async Task<Core.Models.Reason> PostReasonAsync(Core.Models.Reason reason)
-        {
-            var newReason = new Reason
-            {
-                ReasonDescription = reason.ReasonDescription
-            };
-
-            _logger.LogInformation($"Added reason with description {reason.ReasonDescription} to DB.");
-
-            _dbContext.Reasons.Add(newReason);
-            await _dbContext.SaveChangesAsync();
-
-            int nid = await _dbContext.Reasons.MaxAsync(r => r.Id);
-            var nh = await _dbContext.Reasons.FirstOrDefaultAsync(r => r.Id == nid);
-
-            return Mapper.MapReason(nh);
-        }
-
-        /// <summary>
-        /// Removing Reason from DB based on ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A bool based on success/failure</returns>
-        public async Task<bool> RemoveReasonAsync(int id)
-        {
-            var reason = await _dbContext.Reasons.FirstOrDefaultAsync(r => r.Id == id);
-            if (reason== null)
-            {
-                _logger.LogInformation($"Reason with id {id} not found.");
-                return false;
-            }
-            _logger.LogInformation($"Removing reason with {id} from the DB.");
-            _dbContext.Remove(reason);
-            await _dbContext.SaveChangesAsync();
-            return true;
         }
     }
 }

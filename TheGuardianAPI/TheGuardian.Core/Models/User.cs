@@ -31,7 +31,7 @@ namespace TheGuardian.Core.Models
 
         public int Zip { get; set; }
 
-        public string AccessLevel { get; set; }
+        public bool AccessLevel { get; set; }
 
         public bool AccountVerified { get; set; }
 
