@@ -6,7 +6,7 @@ services:
     build:
       context: TheGuardianAPI
       dockerfile: api.Dockerfile
-    image: theguardianapi:1.0
+    image: anvelez26/theguardianapi:1.0
     depends_on:
       - data
     ports:
