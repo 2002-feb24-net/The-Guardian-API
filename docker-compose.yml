@@ -24,7 +24,7 @@ services:
     build:
       context: TheGuardianAPI
       dockerfile: db.Dockerfile
-    image: anvelez26/theguardianapi:1.0
+    image: anvelez26/theguardiandb:1.0
     ports:
       - 5432:5432
     networks:
