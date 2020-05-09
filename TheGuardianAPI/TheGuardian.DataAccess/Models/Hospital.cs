@@ -8,12 +8,6 @@ namespace TheGuardian.DataAccess
 { 
     public class Hospital
     {
-        public Hospital()
-        {
-            Reviews = new HashSet<Review>();
-        }
-
-        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -36,30 +30,22 @@ namespace TheGuardian.DataAccess
 
         public double AggFacilityRating { get; set; }
 
-        public double AggOverallRating { get; set; }
+        public double AggOverallRating { get { return (AggMedicalStaffRating + AggClericalStaffRating + AggFacilityRating) / 3.0; } }
 
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
         public void UpdateAggregateRatings()
         {
-            double aggMedRating = 0, aggCleRating = 0, aggFacRating = 0, aggOveRating = 0;
+            double aggMedRating = 0, aggCleRating = 0, aggFacRating = 0;
             foreach (var review in Reviews)
             {
                 aggMedRating += review.MedicalStaffRating;
                 aggCleRating += review.ClericalStaffRating;
                 aggFacRating += review.FacilityRating;
-                aggOveRating += review.OverallRating;
             }
-            aggMedRating /= Reviews.Count;
-            aggCleRating /= Reviews.Count;
-            aggFacRating /= Reviews.Count;
-            aggOveRating /= Reviews.Count;
-
-            AggMedicalStaffRating = aggMedRating;
-            AggClericalStaffRating = aggCleRating;
-            AggFacilityRating = aggFacRating;
-            AggOverallRating = aggOveRating;
+            AggMedicalStaffRating = aggMedRating / Reviews.Count;
+            AggClericalStaffRating = aggCleRating / Reviews.Count;
+            AggFacilityRating = aggFacRating / Reviews.Count;
         }
-
     }
 }

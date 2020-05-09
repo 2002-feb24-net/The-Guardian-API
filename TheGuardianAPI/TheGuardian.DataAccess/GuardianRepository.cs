@@ -78,7 +78,6 @@ namespace TheGuardian.DataAccess
                 MedicalStaffRating = review.MedicalStaffRating,
                 ClericalStaffRating = review.ClericalStaffRating,
                 FacilityRating = review.FacilityRating,
-                OverallRating = review.OverallRating,
                 WrittenFeedback = review.WrittenFeedback,
                 Reason = review.Reason,
                 DateAdmittance = review.DateAdmittance

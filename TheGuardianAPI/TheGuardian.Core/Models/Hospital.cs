@@ -8,11 +8,6 @@ namespace TheGuardian.Core.Models
 {
     public class Hospital
     {
-        public Hospital()
-        {
-            Reviews = new HashSet<Review>();
-        }
-
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -35,9 +30,9 @@ namespace TheGuardian.Core.Models
 
         public double AggFacilityRating { get; set; }
 
-        public double AggOverallRating { get; set; }
+        public double AggOverallRating { get { return (AggMedicalStaffRating + AggClericalStaffRating + AggFacilityRating) / 3.0; } }
 
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
         public void UpdateAggregateRatings()
         {
@@ -48,14 +43,9 @@ namespace TheGuardian.Core.Models
                 aggCleRating += review.ClericalStaffRating;
                 aggFacRating += review.FacilityRating;
             }
-            aggMedRating /= Reviews.Count;
-            aggCleRating /= Reviews.Count;
-            aggFacRating /= Reviews.Count;
-
-            AggMedicalStaffRating = aggMedRating;
-            AggClericalStaffRating = aggCleRating;
-            AggFacilityRating = aggFacRating;
-            AggOverallRating = (aggMedRating + aggCleRating + aggFacRating) / 3;
+            AggMedicalStaffRating = aggMedRating / Reviews.Count;
+            AggClericalStaffRating = aggCleRating / Reviews.Count;
+            AggFacilityRating = aggFacRating / Reviews.Count;
         }
     }
 }

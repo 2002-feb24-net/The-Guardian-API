@@ -42,7 +42,6 @@ namespace TheGuardian.DataAccess
                 AggMedicalStaffRating = hospital.AggMedicalStaffRating,
                 AggClericalStaffRating = hospital.AggClericalStaffRating,
                 AggFacilityRating = hospital.AggFacilityRating,
-                AggOverallRating = hospital.AggOverallRating,
                 Reviews = hospital.Reviews.Select(MapReview).ToList()
             };
         }
@@ -57,7 +56,6 @@ namespace TheGuardian.DataAccess
                 MedicalStaffRating = review.MedicalStaffRating,
                 ClericalStaffRating = review.ClericalStaffRating,
                 FacilityRating = review.FacilityRating,
-                OverallRating = review.OverallRating,
                 WrittenFeedback = review.WrittenFeedback,
                 DateSubmitted = review.DateSubmitted,
                 DateAdmittance = review.DateAdmittance,

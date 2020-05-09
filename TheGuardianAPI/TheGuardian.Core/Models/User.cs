@@ -8,11 +8,6 @@ namespace TheGuardian.Core.Models
 {
     public class User
     {
-        public User()
-        {
-            Reviews = new HashSet<Review>();
-        }
-
         public int Id { get; set; }
 
         public string FirstName { get; set; }
@@ -37,6 +32,6 @@ namespace TheGuardian.Core.Models
 
         public DateTime AccountDate { get; set; }
 
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
