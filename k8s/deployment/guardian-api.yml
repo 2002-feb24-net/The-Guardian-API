@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guardian-api
+  labels:
+    app: guardian
+    role: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guardian
+      role: api
+  template:
+    metadata:
+      labels:
+        app: guardian
+        role: api
+    spec:
+      containers:
+      - name: guardian-api
+        image: anvelez26/theguardianapi:1.0
+        ports:
+        - containerPort: 80
+        env:
+        - name: DatabaseConnection
+          value: GuardianDbPostgreSqlK8s
+        - name: ConnectionStrings__GuardianDbPostgreSqlK8s
+          value: Host=guardian-db;Username=postgres;Password=R3vTra1n1ng
+        - name: CorsOrigins__0
+          value: http://localhost:4200
+        - name: CorsOrigins__1
+          value: http://192.168.99.100:4200
+        - name: CorsOrigins__2
+          value: http://theguardian.azurewebsites.net
+        - name: CorsOrigins__3
+          value: https://theguardian.azurewebsites.net
+        - name: CorsOrigins__5
+          value: http://ab1a2117c7bfa4faca874e19c4a85fe1-856933387.us-east-2.elb.amazonaws.com
+        - name: UseHttpsRedirection
+          value: 'false'

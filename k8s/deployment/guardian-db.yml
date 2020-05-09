@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guardian-db
+  labels:
+    app: guardian
+    role: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guardian
+      role: db
+  template:
+    metadata:
+      labels:
+        app: guardian
+        role: db
+    spec:
+      containers:
+      - name: guardian-db
+        image: anvelez26/theguardianapi:1.0
+        ports:
+        - containerPort: 5432
