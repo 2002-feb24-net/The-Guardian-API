@@ -72,9 +72,13 @@ namespace TheGuardianAPI {
             });
         }
 
-        public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
+        public void Configure (IApplicationBuilder app, IWebHostEnvironment env, GuardianContext guardianContext) {
             if (env.IsDevelopment ()) {
                 app.UseDeveloperExceptionPage ();
+            }
+
+            if (Configuration.GetValue ("UseHttpsRedirection", defaultValue : true) is true) {
+                app.UseHttpsRedirection ();
             }
 
             app.UseRouting ();
