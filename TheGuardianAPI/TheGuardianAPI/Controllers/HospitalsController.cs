@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using TheGuardian.Core.Interfaces;
 using TheGuardian.DataAccess;
 
 namespace TheGuardian.Api.Controllers
@@ -13,97 +12,90 @@ namespace TheGuardian.Api.Controllers
     [ApiController]
     public class HospitalsController : ControllerBase
     {
-        private readonly GuardianContext _context;
+        private readonly IGuardianRepository _repository;
 
-        public HospitalsController(GuardianContext context)
+        public HospitalsController(IGuardianRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/Hospitals
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Hospital>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Hospital>>> GetHospitals()
         {
-            return await _context.Hospitals.ToListAsync();
+            IEnumerable<Core.Models.Hospital> hospitals = await _repository.GetHospitalsAsync();
+            IEnumerable<Hospital> resource = hospitals.Select(Mapper.MapHospital);
+            return Ok(resource);
         }
 
         // GET: api/Hospitals/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Hospital), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Hospital>> GetHospital(int id)
         {
-            var hospital = await _context.Hospitals.FindAsync(id);
-
+            Core.Models.Hospital hospital = await _repository.GetHospitalAsync(id);
             if (hospital == null)
             {
                 return NotFound();
             }
-
-            return hospital;
+            return Ok(Mapper.MapHospital(hospital));
         }
 
         // PUT: api/Hospitals/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(Hospital), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PutHospital(int id, Hospital hospital)
         {
             if (id != hospital.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(hospital).State = EntityState.Modified;
-
-            try
+            Core.Models.Hospital updatedHospital = await _repository.PutHospitalAsync(id, Mapper.MapHospital(hospital));
+            if (updatedHospital == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HospitalExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest($"Hospital with ID {id} was not found.");
             }
 
-            return NoContent();
+            return Ok($"Hospital with ID {id} was successfully updated.");
         }
 
         // POST: api/Hospitals
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [ProducesResponseType(typeof(Hospital), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Hospital>> PostHospital(Hospital hospital)
         {
-            _context.Hospitals.Add(hospital);
-            await _context.SaveChangesAsync();
-
+            Core.Models.Hospital addedHospital = await _repository.PostHospitalAsync(Mapper.MapHospital(hospital));
+            if (addedHospital == null)
+            {
+                return BadRequest($"Unable to add new hospital.");
+            }
             return CreatedAtAction("GetHospital", new { id = hospital.Id }, hospital);
         }
 
         // DELETE: api/Hospitals/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Hospital>> DeleteHospital(int id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteHospital(int id)
         {
-            var hospital = await _context.Hospitals.FindAsync(id);
-            if (hospital == null)
+            if (await _repository.RemoveHospitalAsync(id))
             {
-                return NotFound();
+                return NoContent();
             }
-
-            _context.Hospitals.Remove(hospital);
-            await _context.SaveChangesAsync();
-
-            return hospital;
-        }
-
-        private bool HospitalExists(int id)
-        {
-            return _context.Hospitals.Any(e => e.Id == id);
+            return NotFound();
         }
     }
 }

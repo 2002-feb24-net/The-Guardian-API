@@ -9,33 +9,21 @@ namespace TheGuardian.Core.Models
     public class Hospital
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
-
         public string Address { get; set; }
-
         public string City { get; set; }
-
         public string State { get; set; }
-
         public int Zip { get; set; }
-
         public string Phone { get; set; }
-
         public string Website { get; set; }
-
         public double AggMedicalStaffRating { get; set; }
-
         public double AggClericalStaffRating { get; set; }
-
         public double AggFacilityRating { get; set; }
-
         public double AggOverallRating { get { return (AggMedicalStaffRating + AggClericalStaffRating + AggFacilityRating) / 3.0; } }
-
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
-
         public void UpdateAggregateRatings()
         {
+            if (Reviews.Count == 0) return;
             double aggMedRating = 0, aggCleRating = 0, aggFacRating = 0;
             foreach (var review in Reviews)
             {

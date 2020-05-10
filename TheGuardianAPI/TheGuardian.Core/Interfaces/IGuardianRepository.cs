@@ -12,8 +12,6 @@ namespace TheGuardian.Core.Interfaces
 
         Task<User> GetUserAsync(int id);
 
-        Task<User> GetUserAsync(string email);
-
         Task<User> PutUserAsync(int id, User user);
 
         Task<User> PostUserAsync(User user);

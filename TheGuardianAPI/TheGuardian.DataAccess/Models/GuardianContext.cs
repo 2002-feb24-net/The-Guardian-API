@@ -81,9 +81,11 @@ namespace TheGuardian.DataAccess
             modelBuilder.Entity<Review>(entity =>
             {
                 entity.HasKey(r => r.Id);
-                entity.HasOne(r => r.Hospital).WithMany(h => h.Reviews).HasForeignKey(r => r.HospitalId);
-                entity.HasOne(r => r.User).WithMany(u => u.Reviews).HasForeignKey(r => r.UserId);
-                entity.Property(r => r.DateAdmittance).HasColumnType("timestamp");
+                entity.Property(r => r.UserId).IsRequired();
+                entity.Property(r => r.HospitalId).IsRequired();
+                entity.HasOne(r => r.User).WithMany(r => r.Reviews).HasForeignKey(r => r.UserId);
+                entity.HasOne(r => r.Hospital).WithMany(r => r.Reviews).HasForeignKey(r => r.HospitalId);
+                entity.Property(r => r.DateAdmittance).IsRequired().HasColumnType("timestamp");
                 entity.Property(r => r.DateSubmitted).HasColumnType("timestamp").HasDefaultValueSql("now()");
                 entity.Property(r => r.MedicalStaffRating).IsRequired();
                 entity.Property(r => r.ClericalStaffRating).IsRequired();
@@ -91,6 +93,18 @@ namespace TheGuardian.DataAccess
                 entity.Property(r => r.WrittenFeedback).IsRequired().HasMaxLength(500);
                 entity.Property(r => r.Reason).IsRequired().HasMaxLength(12);
                 entity.Property(r => r.ReasonOther).HasMaxLength(50);
+                entity.HasData(
+                    new Review
+                    {
+                        Id = 1,
+                        UserId = 1,
+                        HospitalId = 1,
+                        DateAdmittance = DateTime.Now,
+                        MedicalStaffRating = 5,
+                        ClericalStaffRating = 5,
+                        FacilityRating = 5,
+                        WrittenFeedback = "The hospital     "
+                    });
             });
 
             OnModelCreatingPartial(modelBuilder);

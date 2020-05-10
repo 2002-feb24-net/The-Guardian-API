@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using TheGuardian.Core.Interfaces;
 using TheGuardian.DataAccess;
 
 namespace TheGuardian.Api.Controllers
@@ -13,97 +12,90 @@ namespace TheGuardian.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly GuardianContext _context;
+        private readonly IGuardianRepository _repository;
 
-        public UsersController(GuardianContext context)
+        public UsersController(IGuardianRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/Users
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            IEnumerable<Core.Models.User> users = await _repository.GetUsersAsync();
+            IEnumerable<User> resource = users.Select(Mapper.MapUser);
+            return Ok(resource);
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-
+            Core.Models.User user = await _repository.GetUserAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-
-            return user;
+            return Ok(Mapper.MapUser(user));
         }
 
         // PUT: api/Users/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PutUser(int id, User user)
         {
             if (id != user.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
+            Core.Models.User updatedUser = await _repository.PutUserAsync(id, Mapper.MapUser(user));
+            if (updatedUser == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest($"User with ID {id} was not found.");
             }
 
-            return NoContent();
+            return Ok($"User with ID {id} was successfully updated.");
         }
 
         // POST: api/Users
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
+            Core.Models.User addedUser = await _repository.PostUserAsync(Mapper.MapUser(user));
+            if (addedUser == null)
+            {
+                return BadRequest($"Unable to add new user.");
+            }
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            if (await _repository.RemoveUserAsync(id))
             {
-                return NotFound();
+                return NoContent();
             }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return user;
-        }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
+            return NotFound();
         }
     }
 }

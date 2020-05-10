@@ -51,10 +51,7 @@ namespace TheGuardian.DataAccess
             _dbContext.Hospitals.Add(newHospital);
             await _dbContext.SaveChangesAsync();
 
-            int nid = await _dbContext.Hospitals.MaxAsync(h => h.Id);
-            var nh = await _dbContext.Hospitals.FirstOrDefaultAsync(h => h.Id == nid);
-
-            return Mapper.MapHospital(nh);
+            return Mapper.MapHospital(newHospital);
         }
 
         /// <summary>
@@ -64,13 +61,18 @@ namespace TheGuardian.DataAccess
         /// <returns>The review that was added</returns>
         public async Task<Core.Models.Review> PostReviewAsync(Core.Models.Review review)
         {
+            var user = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == review.UserId);
+            var hospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
+            if (user is null || hospital is null)
+            {
+                _logger.LogInformation($"Couldn't find hospital with ID {review.HospitalId} and/or user with ID {review.UserId}.");
+            }
             var reviewExists = await _dbContext.Reviews.FirstOrDefaultAsync(r => r.UserId == review.UserId && r.HospitalId == review.HospitalId);
             if (reviewExists != null)
             {
                 _logger.LogInformation($"User with id {review.UserId} already placed a review at hospital with id {review.HospitalId}.");
                 return null;
             }
-
             Review newReview = new Review
             {
                 UserId = review.UserId,
@@ -80,22 +82,18 @@ namespace TheGuardian.DataAccess
                 FacilityRating = review.FacilityRating,
                 WrittenFeedback = review.WrittenFeedback,
                 Reason = review.Reason,
-                DateAdmittance = review.DateAdmittance
+                DateAdmittance = review.DateAdmittance,
+                User = user, 
+                Hospital = hospital
             };
 
             _logger.LogInformation($"Added a review from user with id {review.UserId} to hospital with id {review.HospitalId} to DB.");
-
             _dbContext.Reviews.Add(newReview);
-            await _dbContext.SaveChangesAsync();
-
-            var hospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == newReview.HospitalId);
+            user.Reviews.Add(newReview);
+            hospital.Reviews.Add(newReview);
             hospital.UpdateAggregateRatings(); // Update the hospital's aggregate ratings after adding a new review.
             await _dbContext.SaveChangesAsync();
-
-            int nid = await _dbContext.Reviews.MaxAsync(r => r.Id);
-            var nr = await _dbContext.Reviews.FirstOrDefaultAsync(r => r.Id == nid);
-
-            return Mapper.MapReview(nr);
+            return Mapper.MapReview(newReview);
         }
 
         /// <summary>
@@ -105,8 +103,7 @@ namespace TheGuardian.DataAccess
         /// <returns>The user that was added</returns>
         public async Task<Core.Models.User> PostUserAsync(Core.Models.User user)
         {
-            var userExists = _dbContext.Users.FirstOrDefaultAsync(u => user.Email == u.Email);
-            if (userExists != null)
+            if (!(await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email) is null))
             {
                 _logger.LogInformation($"User with email {user.Email} already exists.");
                 return null;
@@ -125,14 +122,10 @@ namespace TheGuardian.DataAccess
             };
 
             _logger.LogInformation($"Added a User with email {user.Email} to DB.");
-
             _dbContext.Users.Add(newUser);
             await _dbContext.SaveChangesAsync();
-
-            int nid = await _dbContext.Users.MaxAsync(u => u.Id);
-            var nu = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == nid);
-
-            return Mapper.MapUser(nu);
+            var resultUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            return Mapper.MapUser(resultUser);
         }
 
         /// <summary>
@@ -211,23 +204,6 @@ namespace TheGuardian.DataAccess
                 return null;
             }
             _logger.LogInformation($"Fetched user with id {id}.");
-            return Mapper.MapUser(user);
-        }
-
-        /// <summary>
-        /// Get a user by Email asynchronously
-        /// </summary>
-        /// <param name="email"></param>
-        /// <returns>A single user with email</returns>
-        public async Task<Core.Models.User> GetUserAsync(string email)
-        {
-            var user = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
-            {
-                _logger.LogInformation($"User with email {email} not found.");
-                return null;
-            }
-            _logger.LogInformation($"Fetched user with email {email}.");
             return Mapper.MapUser(user);
         }
 
