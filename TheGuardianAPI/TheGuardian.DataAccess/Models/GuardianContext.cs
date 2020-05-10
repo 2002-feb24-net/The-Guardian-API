@@ -50,7 +50,8 @@ namespace TheGuardian.DataAccess
                         State = "TX",
                         Zip = 76010,
                         AccessLevel = true,
-                        AccountVerified = true
+                        AccountVerified = true,
+                        Reviews = new List<Review>() 
                     });
             });
             
@@ -74,10 +75,12 @@ namespace TheGuardian.DataAccess
                         State = "TX",
                         Zip = 75226,
                         Phone = "(214) 820-0600",
-                        Website = "http://www.baylorhearthospital.com/handler.cfm?event=practice,main"
-                    });
+                        Website = "http://www.baylorhearthospital.com/handler.cfm?event=practice,main",
+                        Reviews = new List<Review>()
+                    }
+                );
             });
-            
+
             modelBuilder.Entity<Review>(entity =>
             {
                 entity.HasKey(r => r.Id);
@@ -93,7 +96,7 @@ namespace TheGuardian.DataAccess
                 entity.Property(r => r.WrittenFeedback).IsRequired().HasMaxLength(500);
                 entity.Property(r => r.Reason).IsRequired().HasMaxLength(12);
                 entity.Property(r => r.ReasonOther).HasMaxLength(50);
-                entity.HasData(
+                /*entity.HasData(
                     new Review
                     {
                         Id = 1,
@@ -103,9 +106,11 @@ namespace TheGuardian.DataAccess
                         MedicalStaffRating = 5,
                         ClericalStaffRating = 5,
                         FacilityRating = 5,
-                        WrittenFeedback = "The hospital     "
-                    });
+                        WrittenFeedback = "Greatest hospital on the planet. Five stars. Totally not biased.",
+                        Reason = "Surgery"
+                    });*/
             });
+            Console.WriteLine("Well hello there!");
 
             OnModelCreatingPartial(modelBuilder);
         }
