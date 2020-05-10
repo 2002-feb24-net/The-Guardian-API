@@ -21,9 +21,10 @@ namespace TheGuardian.DataAccess.Migrations
                     Zip = table.Column<int>(nullable: false),
                     Phone = table.Column<string>(maxLength: 15, nullable: false),
                     Website = table.Column<string>(maxLength: 100, nullable: false),
-                    AggMedicalStaffRating = table.Column<double>(nullable: false),
-                    AggClericalStaffRating = table.Column<double>(nullable: false),
-                    AggFacilityRating = table.Column<double>(nullable: false)
+                    AggMedicalStaffRating = table.Column<double>(nullable: false, defaultValue: 1.0),
+                    AggClericalStaffRating = table.Column<double>(nullable: false, defaultValue: 1.0),
+                    AggFacilityRating = table.Column<double>(nullable: false, defaultValue: 1.0),
+                    AggOverallRating = table.Column<double>(nullable: false, defaultValue: 1.0)
                 },
                 constraints: table =>
                 {
@@ -64,6 +65,7 @@ namespace TheGuardian.DataAccess.Migrations
                     MedicalStaffRating = table.Column<int>(nullable: false),
                     ClericalStaffRating = table.Column<int>(nullable: false),
                     FacilityRating = table.Column<int>(nullable: false),
+                    OverallRating = table.Column<double>(nullable: false),
                     WrittenFeedback = table.Column<string>(maxLength: 500, nullable: false),
                     DateSubmitted = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
                     DateAdmittance = table.Column<DateTime>(type: "timestamp", nullable: false),
@@ -89,8 +91,8 @@ namespace TheGuardian.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Hospitals",
-                columns: new[] { "Id", "Address", "AggClericalStaffRating", "AggFacilityRating", "AggMedicalStaffRating", "City", "Name", "Phone", "State", "Website", "Zip" },
-                values: new object[] { 1, "621 North Hall Street", 0.0, 0.0, 0.0, "Dallas", "Baylor Scott & White Heart and Vascular Hospital", "(214) 820-0600", "TX", "http://www.baylorhearthospital.com/handler.cfm?event=practice,main", 75226 });
+                columns: new[] { "Id", "Address", "AggClericalStaffRating", "AggFacilityRating", "AggMedicalStaffRating", "AggOverallRating", "City", "Name", "Phone", "State", "Website", "Zip" },
+                values: new object[] { 1, "621 North Hall Street", 4.0, 4.0, 4.0, 4.0, "Dallas", "Baylor Scott & White Heart and Vascular Hospital", "(214) 820-0600", "TX", "http://www.baylorhearthospital.com/handler.cfm?event=practice,main", 75226 });
 
             migrationBuilder.InsertData(
                 table: "Users",

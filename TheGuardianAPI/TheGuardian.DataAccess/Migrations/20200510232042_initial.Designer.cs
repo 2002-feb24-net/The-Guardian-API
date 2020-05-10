@@ -10,7 +10,7 @@ using TheGuardian.DataAccess;
 namespace TheGuardian.DataAccess.Migrations
 {
     [DbContext(typeof(GuardianContext))]
-    [Migration("20200510164525_initial")]
+    [Migration("20200510232042_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,13 +34,24 @@ namespace TheGuardian.DataAccess.Migrations
                         .HasMaxLength(35);
 
                     b.Property<double>("AggClericalStaffRating")
-                        .HasColumnType("double precision");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double precision")
+                        .HasDefaultValue(1.0);
 
                     b.Property<double>("AggFacilityRating")
-                        .HasColumnType("double precision");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double precision")
+                        .HasDefaultValue(1.0);
 
                     b.Property<double>("AggMedicalStaffRating")
-                        .HasColumnType("double precision");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double precision")
+                        .HasDefaultValue(1.0);
+
+                    b.Property<double>("AggOverallRating")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double precision")
+                        .HasDefaultValue(1.0);
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -79,9 +90,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 1,
                             Address = "621 North Hall Street",
-                            AggClericalStaffRating = 0.0,
-                            AggFacilityRating = 0.0,
-                            AggMedicalStaffRating = 0.0,
+                            AggClericalStaffRating = 4.0,
+                            AggFacilityRating = 4.0,
+                            AggMedicalStaffRating = 4.0,
+                            AggOverallRating = 4.0,
                             City = "Dallas",
                             Name = "Baylor Scott & White Heart and Vascular Hospital",
                             Phone = "(214) 820-0600",
@@ -117,6 +129,9 @@ namespace TheGuardian.DataAccess.Migrations
 
                     b.Property<int>("MedicalStaffRating")
                         .HasColumnType("integer");
+
+                    b.Property<double>("OverallRating")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Reason")
                         .IsRequired()

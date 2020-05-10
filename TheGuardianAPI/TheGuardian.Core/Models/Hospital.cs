@@ -16,24 +16,14 @@ namespace TheGuardian.Core.Models
         public int Zip { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
+        [Range(1.00, 5.00)]
         public double AggMedicalStaffRating { get; set; }
+        [Range(1.00, 5.00)]
         public double AggClericalStaffRating { get; set; }
+        [Range(1.00, 5.00)]
         public double AggFacilityRating { get; set; }
-        public double AggOverallRating { get { return (AggMedicalStaffRating + AggClericalStaffRating + AggFacilityRating) / 3.0; } }
+        [Range(1.00, 5.00)]
+        public double AggOverallRating { get; set; }
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
-        public void UpdateAggregateRatings()
-        {
-            if (Reviews.Count == 0) return;
-            double aggMedRating = 0, aggCleRating = 0, aggFacRating = 0;
-            foreach (var review in Reviews)
-            {
-                aggMedRating += review.MedicalStaffRating;
-                aggCleRating += review.ClericalStaffRating;
-                aggFacRating += review.FacilityRating;
-            }
-            AggMedicalStaffRating = aggMedRating / Reviews.Count;
-            AggClericalStaffRating = aggCleRating / Reviews.Count;
-            AggFacilityRating = aggFacRating / Reviews.Count;
-        }
     }
 }

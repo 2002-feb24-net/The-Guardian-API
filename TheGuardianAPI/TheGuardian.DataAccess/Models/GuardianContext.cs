@@ -23,63 +23,57 @@ namespace TheGuardian.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(entity =>
+            User admin = new User
             {
-                entity.HasKey(u => u.Id);
-                entity.Property(u => u.FirstName).IsRequired().HasMaxLength(20);
-                entity.Property(u => u.LastName).IsRequired().HasMaxLength(20);
-                entity.Property(u => u.Email).IsRequired().HasMaxLength(35);
-                entity.Property(u => u.Password).IsRequired().HasMaxLength(16);
-                entity.Property(u => u.Address).IsRequired().HasMaxLength(35);
-                entity.Property(u => u.City).IsRequired().HasMaxLength(25);
-                entity.Property(u => u.State).IsRequired().HasMaxLength(2);
-                entity.Property(u => u.Zip).IsRequired();
-                entity.Property(u => u.AccessLevel).HasDefaultValue(false); // False => User, True => Admin
-                entity.Property(r => r.AccountDate).HasColumnType("timestamp").HasDefaultValueSql("now()");
-                entity.Property(u => u.AccountVerified).HasDefaultValue(false);
-                entity.HasData(
-                    new User
-                    {
-                        Id = 1, 
-                        FirstName = "Super",
-                        LastName = "Admin",
-                        Email = "superadmin@gmail.com",
-                        Password = "R3vTra1n1ng",
-                        Address = "1001 S Center St",
-                        City = "Arlington",
-                        State = "TX",
-                        Zip = 76010,
-                        AccessLevel = true,
-                        AccountVerified = true,
-                        Reviews = new List<Review>() 
-                    });
-            });
-            
-            modelBuilder.Entity<Hospital>(entity =>
+                Id = 1,
+                FirstName = "Super",
+                LastName = "Admin",
+                Email = "superadmin@gmail.com",
+                Password = "R3vTra1n1ng",
+                Address = "1001 S Center St",
+                City = "Arlington",
+                State = "TX",
+                Zip = 76010,
+                AccessLevel = true,
+                AccountVerified = true,
+                Reviews = new List<Review>()
+            };
+            Hospital newHospital = new Hospital
             {
-                entity.HasKey(h => h.Id);
-                entity.Property(h => h.Name).IsRequired().HasMaxLength(80);
-                entity.Property(h => h.Address).IsRequired().HasMaxLength(35);
-                entity.Property(h => h.City).IsRequired().HasMaxLength(25);
-                entity.Property(h => h.State).IsRequired().HasMaxLength(2);
-                entity.Property(h => h.Zip).IsRequired();
-                entity.Property(h => h.Phone).IsRequired().HasMaxLength(15);
-                entity.Property(h => h.Website).IsRequired().HasMaxLength(100);
-                entity.HasData( 
-                    new Hospital
-                    {
-                        Id = 1,
-                        Name = "Baylor Scott & White Heart and Vascular Hospital",
-                        Address = "621 North Hall Street",
-                        City = "Dallas",
-                        State = "TX",
-                        Zip = 75226,
-                        Phone = "(214) 820-0600",
-                        Website = "http://www.baylorhearthospital.com/handler.cfm?event=practice,main",
-                        Reviews = new List<Review>()
-                    }
-                );
-            });
+                Id = 1,
+                Name = "Baylor Scott & White Heart and Vascular Hospital",
+                Address = "621 North Hall Street",
+                City = "Dallas",
+                State = "TX",
+                Zip = 75226,
+                Phone = "(214) 820-0600",
+                Website = "http://www.baylorhearthospital.com/handler.cfm?event=practice,main",
+                Reviews = new List<Review>(),
+                AggClericalStaffRating = 4,
+                AggFacilityRating = 4,
+                AggMedicalStaffRating = 4,
+                AggOverallRating = 4
+            };
+            Review newReview = new Review
+            {
+                Id = 1,
+                UserId = 1,
+                HospitalId = 1,
+                DateAdmittance = DateTime.Now,
+                DateSubmitted = DateTime.Now,
+                MedicalStaffRating = 5,
+                ClericalStaffRating = 5,
+                FacilityRating = 5,
+                OverallRating = 5,
+                WrittenFeedback = "Extremely satisfactory surgery. Five stars.",
+                Reason = "Surgery",
+                ReasonOther = "",
+                Hospital = newHospital,
+                User = admin
+            };
+
+            //admin.Reviews.Add(newReview);
+            //newHospital.Reviews.Add(newReview);
 
             modelBuilder.Entity<Review>(entity =>
             {
@@ -96,20 +90,43 @@ namespace TheGuardian.DataAccess
                 entity.Property(r => r.WrittenFeedback).IsRequired().HasMaxLength(500);
                 entity.Property(r => r.Reason).IsRequired().HasMaxLength(12);
                 entity.Property(r => r.ReasonOther).HasMaxLength(50);
-                /*entity.HasData(
-                    new Review
-                    {
-                        Id = 1,
-                        UserId = 1,
-                        HospitalId = 1,
-                        DateAdmittance = DateTime.Now,
-                        MedicalStaffRating = 5,
-                        ClericalStaffRating = 5,
-                        FacilityRating = 5,
-                        WrittenFeedback = "Greatest hospital on the planet. Five stars. Totally not biased.",
-                        Reason = "Surgery"
-                    });*/
+                //entity.HasData(newReview);
             });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.FirstName).IsRequired().HasMaxLength(20);
+                entity.Property(u => u.LastName).IsRequired().HasMaxLength(20);
+                entity.Property(u => u.Email).IsRequired().HasMaxLength(35);
+                entity.Property(u => u.Password).IsRequired().HasMaxLength(16);
+                entity.Property(u => u.Address).IsRequired().HasMaxLength(35);
+                entity.Property(u => u.City).IsRequired().HasMaxLength(25);
+                entity.Property(u => u.State).IsRequired().HasMaxLength(2);
+                entity.Property(u => u.Zip).IsRequired();
+                entity.Property(u => u.AccessLevel).HasDefaultValue(false); // False => User, True => Admin
+                entity.Property(u => u.AccountDate).HasColumnType("timestamp").HasDefaultValueSql("now()");
+                entity.Property(u => u.AccountVerified).HasDefaultValue(false);
+                entity.HasData(admin);
+            });
+            
+            modelBuilder.Entity<Hospital>(entity =>
+            {
+                entity.HasKey(h => h.Id);
+                entity.Property(h => h.Name).IsRequired().HasMaxLength(80);
+                entity.Property(h => h.Address).IsRequired().HasMaxLength(35);
+                entity.Property(h => h.City).IsRequired().HasMaxLength(25);
+                entity.Property(h => h.State).IsRequired().HasMaxLength(2);
+                entity.Property(h => h.Zip).IsRequired();
+                entity.Property(h => h.Phone).IsRequired().HasMaxLength(15);
+                entity.Property(h => h.Website).IsRequired().HasMaxLength(100);
+                entity.Property(h => h.AggMedicalStaffRating).HasDefaultValue(1);
+                entity.Property(h => h.AggFacilityRating).HasDefaultValue(1);
+                entity.Property(h => h.AggClericalStaffRating).HasDefaultValue(1);
+                entity.Property(h => h.AggOverallRating).HasDefaultValue(1);
+                entity.HasData(newHospital);
+            });
+
             Console.WriteLine("Well hello there!");
 
             OnModelCreatingPartial(modelBuilder);

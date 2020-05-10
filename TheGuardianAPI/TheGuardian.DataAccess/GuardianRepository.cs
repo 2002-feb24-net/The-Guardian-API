@@ -80,6 +80,7 @@ namespace TheGuardian.DataAccess
                 MedicalStaffRating = review.MedicalStaffRating,
                 ClericalStaffRating = review.ClericalStaffRating,
                 FacilityRating = review.FacilityRating,
+                OverallRating = (review.MedicalStaffRating + review.ClericalStaffRating + review.FacilityRating) / 3.0,
                 WrittenFeedback = review.WrittenFeedback,
                 Reason = review.Reason,
                 DateAdmittance = review.DateAdmittance,
@@ -91,9 +92,28 @@ namespace TheGuardian.DataAccess
             _dbContext.Reviews.Add(newReview);
             user.Reviews.Add(newReview);
             hospital.Reviews.Add(newReview);
-            hospital.UpdateAggregateRatings(); // Update the hospital's aggregate ratings after adding a new review.
+            //UpdateAggregateRatings(hospital); // Update the hospital's aggregate ratings after adding a new review.
             await _dbContext.SaveChangesAsync();
             return Mapper.MapReview(newReview);
+        }
+
+        public void UpdateAggregateRatings(Hospital hospital)
+        {
+            if (hospital.Reviews.Count == 0)
+            {
+                return;
+            }
+            double totalClericalRatings = 0, totalFacilityRatings = 0, totalMedicalRatings = 0;
+            foreach (var review in hospital.Reviews.ToList())
+            {
+                totalClericalRatings += review.ClericalStaffRating;
+                totalFacilityRatings += review.FacilityRating;
+                totalMedicalRatings += review.MedicalStaffRating;
+            }
+            hospital.AggClericalStaffRating = totalClericalRatings / hospital.Reviews.Count;
+            hospital.AggFacilityRating = totalClericalRatings / hospital.Reviews.Count;
+            hospital.AggMedicalStaffRating = totalMedicalRatings / hospital.Reviews.Count;
+            hospital.AggOverallRating = (hospital.AggClericalStaffRating + hospital.AggFacilityRating + hospital.AggMedicalStaffRating) / 3.0;
         }
 
         /// <summary>
@@ -339,6 +359,7 @@ namespace TheGuardian.DataAccess
                 return null;
             }
             _logger.LogInformation($"Updating review with id {id}.");
+            review.OverallRating = (review.MedicalStaffRating + review.ClericalStaffRating + review.FacilityRating) / 3.0;
             _dbContext.Entry(reviewExists).CurrentValues.SetValues(review);
             await _dbContext.SaveChangesAsync();
             return review;

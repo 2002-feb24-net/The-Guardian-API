@@ -11,10 +11,14 @@ namespace TheGuardian.Core.Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public int HospitalId { get; set; }
+        [Range(1, 5)]
         public int MedicalStaffRating { get; set; }
+        [Range(1, 5)]
         public int ClericalStaffRating { get; set; }
+        [Range(1, 5)]
         public int FacilityRating { get; set; }
-        public double OverallRating { get { return (MedicalStaffRating + ClericalStaffRating + FacilityRating) / 3.0; } }
+        [Range(1.00, 5.00)]
+        public double OverallRating { get; set; }
         public string WrittenFeedback { get; set; }
         public DateTime DateSubmitted { get; set; }
         public DateTime DateAdmittance { get; set; }
