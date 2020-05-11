@@ -87,6 +87,7 @@ namespace TheGuardian.DataAccess
                 entity.Property(r => r.MedicalStaffRating).IsRequired();
                 entity.Property(r => r.ClericalStaffRating).IsRequired();
                 entity.Property(r => r.FacilityRating).IsRequired();
+                entity.Property(r => r.OverallRating).IsRequired();
                 entity.Property(r => r.WrittenFeedback).IsRequired().HasMaxLength(500);
                 entity.Property(r => r.Reason).IsRequired().HasMaxLength(12);
                 entity.Property(r => r.ReasonOther).HasMaxLength(50);

@@ -10,7 +10,7 @@ using TheGuardian.DataAccess;
 namespace TheGuardian.DataAccess.Migrations
 {
     [DbContext(typeof(GuardianContext))]
-    [Migration("20200510232042_initial")]
+    [Migration("20200511001913_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
