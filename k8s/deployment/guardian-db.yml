@@ -20,5 +20,6 @@ spec:
       containers:
       - name: guardian-db
         image: anvelez26/theguardiandb:1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 5432
