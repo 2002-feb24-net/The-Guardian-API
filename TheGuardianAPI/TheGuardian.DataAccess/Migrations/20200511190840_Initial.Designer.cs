@@ -10,8 +10,8 @@ using TheGuardian.DataAccess;
 namespace TheGuardian.DataAccess.Migrations
 {
     [DbContext(typeof(GuardianContext))]
-    [Migration("20200511063704_initial")]
-    partial class initial
+    [Migration("20200511190840_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -678,13 +678,13 @@ namespace TheGuardian.DataAccess.Migrations
 
             modelBuilder.Entity("TheGuardian.DataAccess.Review", b =>
                 {
-                    b.HasOne("TheGuardian.DataAccess.Hospital", "Hospital")
+                    b.HasOne("TheGuardian.DataAccess.Hospital", null)
                         .WithMany("Reviews")
                         .HasForeignKey("HospitalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TheGuardian.DataAccess.User", "User")
+                    b.HasOne("TheGuardian.DataAccess.User", null)
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
