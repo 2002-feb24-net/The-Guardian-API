@@ -61,14 +61,14 @@ namespace TheGuardian.DataAccess
         /// <returns>The review that was added</returns>
         public async Task<Core.Models.Review> PostReviewAsync(Core.Models.Review review)
         {
-            var user = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == review.UserId);
-            var hospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == review.UserId);
+            var hospital = await _dbContext.Hospitals.FirstOrDefaultAsync(h => h.Id == review.HospitalId);
             if (user is null || hospital is null)
             {
                 _logger.LogInformation($"Couldn't find hospital with ID {review.HospitalId} and/or user with ID {review.UserId}.");
                 return null;
             }
-            if (!(await _dbContext.Reviews.FirstOrDefaultAsync(r => r.UserId == review.UserId && r.HospitalId == review.HospitalId) is null))
+            if (!(await _dbContext.Reviews.FirstOrDefaultAsync(r => r.UserId == user.Id && r.HospitalId == hospital.Id) is null))
             {
                 _logger.LogInformation($"User with id {review.UserId} already placed a review at hospital with id {review.HospitalId}.");
                 return null;
@@ -81,30 +81,37 @@ namespace TheGuardian.DataAccess
                 ClericalStaffRating = review.ClericalStaffRating,
                 FacilityRating = review.FacilityRating,
                 OverallRating = (review.MedicalStaffRating + review.ClericalStaffRating + review.FacilityRating) / 3.0,
-                WrittenFeedback = review.WrittenFeedback,
+                WrittenFeedback = "Excellent hospital. (Proof of update)",
                 Reason = review.Reason,
+                ReasonOther = review.ReasonOther,
                 DateAdmittance = review.DateAdmittance,
                 User = user,
                 Hospital = hospital
             };
 
+            var updatedUser = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == review.UserId);
+            var updatedHospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
+
             _logger.LogInformation($"Added a review from user with id {review.UserId} to hospital with id {review.HospitalId} to DB.");
             _dbContext.Reviews.Add(newReview);
-            if (user.Reviews is null)
+
+            if (updatedUser.Reviews is null)
             {
-                user.Reviews = new List<Review>();
+                updatedUser.Reviews = new List<Review>();
             }
-            if (hospital.Reviews is null)
+            if (updatedHospital.Reviews is null)
             {
-                hospital.Reviews = new List<Review>();
+                updatedHospital.Reviews = new List<Review>();
             }
-            user.Reviews.Add(newReview);
-            hospital.Reviews.Add(newReview);
-            UpdateAggregateRatings(hospital); // Update the hospital's aggregate ratings after adding a new review.
-            _dbContext.Entry(hospital).CurrentValues.SetValues(hospital);
-            _dbContext.Entry(user).CurrentValues.SetValues(user);
+
+            updatedHospital.Reviews.Add(newReview);
+            updatedUser.Reviews.Add(newReview);
+            UpdateAggregateRatings(updatedHospital); // Update the hospital's aggregate ratings after adding a new review.
+            _dbContext.Entry(updatedHospital).CurrentValues.SetValues(updatedHospital);
+            _dbContext.Entry(updatedUser).CurrentValues.SetValues(updatedUser);
             await _dbContext.SaveChangesAsync();
-            return Mapper.MapReview(newReview);
+            var resultReview = await _dbContext.Reviews.Include(r => r.User).Include(r => r.Hospital).FirstOrDefaultAsync(r => r.Id == newReview.Id);
+            return Mapper.MapReview(resultReview);
         }
 
         public void UpdateAggregateRatings(Hospital hospital)
