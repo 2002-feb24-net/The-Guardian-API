@@ -92,17 +92,44 @@ namespace TheGuardian.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Hospitals",
                 columns: new[] { "Id", "Address", "AggClericalStaffRating", "AggFacilityRating", "AggMedicalStaffRating", "AggOverallRating", "City", "Name", "Phone", "State", "Website", "Zip" },
-                values: new object[] { 1, "621 North Hall Street", 4.0, 4.0, 4.0, 4.0, "Dallas", "Baylor Scott & White Heart and Vascular Hospital", "(214) 820-0600", "TX", "http://www.baylorhearthospital.com/handler.cfm?event=practice,main", 75226 });
+                values: new object[,]
+                {
+                    { 1, "621 North Hall Street", 5.0, 5.0, 5.0, 5.0, "Dallas", "Baylor Scott & White Heart and Vascular Hospital", "(214) 820-0600", "TX", "http://www.baylorhearthospital.com/handler.cfm?event=practice,main", 75226 },
+                    { 29, "5900 Altamesa Boulevard", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "USMD Hospital at Fort Worth", "(817) 433-9100", "TX", "http://www.usmdfortworth.com/", 76132 },
+                    { 28, "6100 Harris Parkway", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "Texas Health Southwest", "(817) 433-5000", "TX", "http://www.texashealth.org/southwestfw/", 76132 },
+                    { 27, "1301 Pennsylvania Avenue", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "Texas Health Fort Worth", "(817) 250-2000", "TX", "http://www.texashealth.org/fortworth/", 76104 },
+                    { 26, "10864 Texas Health Trail", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "Texas Health Alliance", "(682) 212-2000", "TX", "http://www.texashealth.org/alliance/", 76244 },
+                    { 25, "900 Eighth Avenue", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "Medical City Fort Worth", "(817) 877-5292", "TX", "http://medicalcityfortworth.com/", 76104 },
+                    { 24, "3101 North Tarrant Pkwy", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "Medical City Alliance", "(817) 639-1000", "TX", "http://medicalcityalliance.com/", 76177 },
+                    { 23, "1500 South Main Street", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "John Peter Smith Hospital", "(817) 921-3431", "TX", "http://www.jpshealthnet.org/", 76104 },
+                    { 22, "1800 Park Place Avenue", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "Baylor Scott & White Surgical Hospital Fort Worth", "(682) 703-5600", "TX", "http://www.bshfw.com/", 76110 },
+                    { 21, "1400 Eighth Avenue", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "Baylor Scott & White All Saints Medical Center", "(817) 926-2544", "TX", "http://www.bswhealth.com/locations/fort-worth/Pages/default.aspx", 76104 },
+                    { 20, "801 West Interstate 20	Arlington", 1.0, 1.0, 1.0, 1.0, "Arlington", "USMD Hospital at Arlington", "(817) 472-3400", "TX", "http://www.usmdarlington.com/", 76017 },
+                    { 19, "811 Wright Street", 1.0, 1.0, 1.0, 1.0, "Arlington", "Texas Health Heart & Vascular Hospital Arlington", "(817) 960-3500", "TX", "http://www.texashealthheartandvascular.org/", 76012 },
+                    { 18, "800 West Randol Mill Road", 1.0, 1.0, 1.0, 1.0, "Arlington", "Texas Health Arlington Medical Hospital", "(817) 960-6100", "TX", "http://www.texashealth.org/arlington/", 76012 },
+                    { 17, "3301 Matlock Rd.", 1.0, 1.0, 1.0, 1.0, "Arlington", "Medical City Arlington", "(817) 465-3241", "TX", "http://medicalcityarlington.com/", 76015 },
+                    { 30, "3200 North Tarrant Parkway", 1.0, 1.0, 1.0, 1.0, "Fort Worth", "Wise Health Surgical Hospital at Parkway", "(817) 502-7300", "TX", "http://www.wisehealthsurgicalhospital.com/parkway/", 76177 },
+                    { 16, "707 Highlander Boulevard", 1.0, 1.0, 1.0, 1.0, "Arlington", "Baylor Scott & White Orthopedic and Spine Hospital Arlington", "(855) 416-7846", "TX", "http://baylorarlington.com/", 76015 },
+                    { 14, "6201 Harry Hines Boulevard", 1.0, 1.0, 1.0, 1.0, "Dallas", "William P. Clements Jr. University Hospital", "(214) 633-5555", "TX", "http://utswmed.org/locations/clements/william-p-clements-jr-university-hospital/", 75390 },
+                    { 13, "7115 Greenville Avenue", 1.0, 1.0, 1.0, 1.0, "Dallas", "Texas Institute for Surgery", "(214) 647-5300", "TX", "http://www.texasinstituteforsurgery.com/", 75231 },
+                    { 12, "8200 Walnut Hill Lane", 1.0, 1.0, 1.0, 1.0, "Dallas", "Texas Health Dallas", "(214) 345-6789", "TX", "http://www.texashealth.org/dallas/", 75231 },
+                    { 11, "5200 Harry Hines Boulevard", 1.0, 1.0, 1.0, 1.0, "Dallas", "Parkland Hospital", "(214) 590-8000", "TX", "http://www.parklandhospital.com/", 75235 },
+                    { 10, "9301 North Central Expressway Suite 100", 1.0, 1.0, 1.0, 1.0, "Dallas", "North Central Surgical Center", "(214) 265-2810", "TX", "http://www.northcentralsurgical.com/", 75231 },
+                    { 9, "1441 North Beckley Avenue", 1.0, 1.0, 1.0, 1.0, "Dallas", "Methodist Dallas Medical Center", "(214) 947-8181", "TX", "http://www.methodisthealthsystem.org/methodist-dallas-medical-center/?L=true", 75203 },
+                    { 8, "3500 West Wheatland Road", 1.0, 1.0, 1.0, 1.0, "Dallas", "Methodist Charlton Medical Center", "(214) 947-7777", "TX", "http://www.methodisthealthsystem.org/methodist-charlton-medical-center/", 75237 },
+                    { 7, "7777 Forest Lane", 1.0, 1.0, 1.0, 1.0, "Dallas", "Medical City Dallas", "(972) 566-700", "TX", "http://medicalcityhospital.com/", 75230 },
+                    { 6, "4500 South Lancaster Road", 1.0, 1.0, 1.0, 1.0, "Dallas", "Dallas VA Medical Center", "(214) 742-8387", "TX", "http://www.northtexas.va.gov/", 75216 },
+                    { 5, "7 Medical Parkway", 1.0, 1.0, 1.0, 1.0, "Dallas", "Dallas Medical Center", "(972) 888-7000", "TX", "http://www.dallasmedcenter.com/", 75234 },
+                    { 4, "9440 Poppy Drive", 1.0, 1.0, 1.0, 1.0, "Dallas", "City Hospital at White Rock", "(214) 324-6100", "TX", "http://cityhospital.co/", 75218 },
+                    { 3, "3500 Gaston Street", 1.0, 1.0, 1.0, 1.0, "Dallas", "Baylor University Medical Center", "(214) 820-0111", "TX", "http://www.bswhealth.com/locations/dallas/Pages/default.aspx", 75246 },
+                    { 2, "2727 East Lemmon Ave.", 1.0, 1.0, 1.0, 1.0, "Dallas", "Baylor Scott & White Medical Center Uptown", "(214) 443-3000", "TX", "http://www.bmcuptown.com/", 75204 },
+                    { 15, "5151 Harry Hines Boulevard", 1.0, 1.0, 1.0, 1.0, "Dallas", "Zale Lipshy Pavilion-William P. Clements Jr. University Hospital", "(214) 645-5555", "TX", "http://utswmed.org/locations/zale-lipshy-pavilion/zale-lipshy-pavilion/", 75390 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AccessLevel", "AccountVerified", "Address", "City", "Email", "FirstName", "LastName", "Password", "State", "Zip" },
                 values: new object[] { 1, true, true, "1001 S Center St", "Arlington", "superadmin@gmail.com", "Super", "Admin", "R3vTra1n1ng", "TX", 76010 });
-
-            migrationBuilder.InsertData(
-                table: "Reviews",
-                columns: new[] { "Id", "ClericalStaffRating", "DateAdmittance", "DateSubmitted", "FacilityRating", "HospitalId", "MedicalStaffRating", "OverallRating", "Reason", "ReasonOther", "UserId", "WrittenFeedback" },
-                values: new object[] { 1, 5, new DateTime(2020, 5, 10, 20, 19, 23, 857, DateTimeKind.Local).AddTicks(2769), new DateTime(2020, 5, 10, 20, 19, 23, 859, DateTimeKind.Local).AddTicks(807), 5, 1, 5, 5.0, "Surgery", "", 1, "Extremely satisfactory surgery. Five stars." });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_HospitalId",

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace TheGuardian.DataAccess
 { 
@@ -23,6 +24,11 @@ namespace TheGuardian.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Read all text from file with Texas Hospitals in JSON format.
+            var fileText = File.ReadAllText(@"../TheGuardian.DataAccess/Models/TexasHospitals.txt");
+            // Deserialize JSON string.
+            List<Hospital> hospitalsFromFile = JsonSerializer.Deserialize<List<Hospital>>(fileText);
+
             User admin = new User
             {
                 Id = 1,
@@ -38,42 +44,6 @@ namespace TheGuardian.DataAccess
                 AccountVerified = true,
                 Reviews = new List<Review>()
             };
-            Hospital newHospital = new Hospital
-            {
-                Id = 1,
-                Name = "Baylor Scott & White Heart and Vascular Hospital",
-                Address = "621 North Hall Street",
-                City = "Dallas",
-                State = "TX",
-                Zip = 75226,
-                Phone = "(214) 820-0600",
-                Website = "http://www.baylorhearthospital.com/handler.cfm?event=practice,main",
-                Reviews = new List<Review>(),
-                AggClericalStaffRating = 4,
-                AggFacilityRating = 4,
-                AggMedicalStaffRating = 4,
-                AggOverallRating = 4
-            };
-            Review newReview = new Review
-            {
-                Id = 1,
-                UserId = 1,
-                HospitalId = 1,
-                DateAdmittance = DateTime.Now,
-                DateSubmitted = DateTime.Now,
-                MedicalStaffRating = 5,
-                ClericalStaffRating = 5,
-                FacilityRating = 5,
-                OverallRating = 5,
-                WrittenFeedback = "Extremely satisfactory surgery. Five stars.",
-                Reason = "Surgery",
-                ReasonOther = "",
-                Hospital = null,
-                User = null
-            };
-
-            //admin.Reviews.Add(newReview);
-            //newHospital.Reviews.Add(newReview);
 
             modelBuilder.Entity<User>(entity =>
             {
@@ -106,7 +76,7 @@ namespace TheGuardian.DataAccess
                 entity.Property(h => h.AggFacilityRating).HasDefaultValue(1);
                 entity.Property(h => h.AggClericalStaffRating).HasDefaultValue(1);
                 entity.Property(h => h.AggOverallRating).HasDefaultValue(1);
-                entity.HasData(newHospital);
+                entity.HasData(hospitalsFromFile);
             });
 
             modelBuilder.Entity<Review>(entity =>
@@ -125,10 +95,7 @@ namespace TheGuardian.DataAccess
                 entity.Property(r => r.WrittenFeedback).IsRequired().HasMaxLength(500);
                 entity.Property(r => r.Reason).IsRequired().HasMaxLength(12);
                 entity.Property(r => r.ReasonOther).HasMaxLength(50);
-                entity.HasData(newReview);
             });
-
-            Console.WriteLine("Well hello there!");
 
             OnModelCreatingPartial(modelBuilder);
         }
