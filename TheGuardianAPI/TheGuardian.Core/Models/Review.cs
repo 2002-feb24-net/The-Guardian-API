@@ -24,7 +24,5 @@ namespace TheGuardian.Core.Models
         public DateTime DateAdmittance { get; set; }
         public string Reason { get; set; }
         public string ReasonOther { get; set; }
-        public User User { get; set; }
-        public Hospital Hospital { get; set; }
     }
 }

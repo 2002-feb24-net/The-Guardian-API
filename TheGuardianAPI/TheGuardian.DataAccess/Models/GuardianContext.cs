@@ -25,9 +25,9 @@ namespace TheGuardian.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Read all text from file with Texas Hospitals in JSON format.
-            var fileText = File.ReadAllText(@"../TheGuardian.DataAccess/Models/TexasHospitals.txt");
+            //var fileText = File.ReadAllText(@"../TheGuardian.DataAccess/Models/TexasHospitals.txt");
             // Deserialize JSON string.
-            List<Hospital> hospitalsFromFile = JsonSerializer.Deserialize<List<Hospital>>(fileText);
+            //List<Hospital> hospitalsFromFile = JsonSerializer.Deserialize<List<Hospital>>(fileText);
 
             User admin = new User
             {
@@ -76,7 +76,7 @@ namespace TheGuardian.DataAccess
                 entity.Property(h => h.AggFacilityRating).HasDefaultValue(1);
                 entity.Property(h => h.AggClericalStaffRating).HasDefaultValue(1);
                 entity.Property(h => h.AggOverallRating).HasDefaultValue(1);
-                foreach (var hospital in hospitalsFromFile)
+                /*foreach (var hospital in hospitalsFromFile)
                 {
                     entity.HasData(
                         new Hospital
@@ -90,7 +90,7 @@ namespace TheGuardian.DataAccess
                             Phone = hospital.Phone,
                             Website = hospital.Website
                         });
-                }
+                }*/
             });
 
             modelBuilder.Entity<Review>(entity =>
@@ -98,8 +98,6 @@ namespace TheGuardian.DataAccess
                 entity.HasKey(r => r.Id);
                 entity.Property(r => r.UserId).IsRequired();
                 entity.Property(r => r.HospitalId).IsRequired();
-                entity.HasOne(r => r.User).WithMany(r => r.Reviews).HasForeignKey(r => r.UserId);
-                entity.HasOne(r => r.Hospital).WithMany(r => r.Reviews).HasForeignKey(r => r.HospitalId);
                 entity.Property(r => r.DateAdmittance).IsRequired().HasColumnType("timestamp");
                 entity.Property(r => r.DateSubmitted).HasColumnType("timestamp").HasDefaultValueSql("now()");
                 entity.Property(r => r.MedicalStaffRating).IsRequired();

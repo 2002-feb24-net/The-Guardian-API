@@ -81,36 +81,26 @@ namespace TheGuardian.DataAccess
                 ClericalStaffRating = review.ClericalStaffRating,
                 FacilityRating = review.FacilityRating,
                 OverallRating = (review.MedicalStaffRating + review.ClericalStaffRating + review.FacilityRating) / 3.0,
-                WrittenFeedback = "Excellent hospital. (Proof of update)",
+                WrittenFeedback = review.WrittenFeedback,
                 Reason = review.Reason,
                 ReasonOther = review.ReasonOther,
                 DateAdmittance = review.DateAdmittance,
-                User = user,
-                Hospital = hospital
             };
-
-            var updatedUser = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == review.UserId);
-            var updatedHospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
 
             _logger.LogInformation($"Added a review from user with id {review.UserId} to hospital with id {review.HospitalId} to DB.");
             _dbContext.Reviews.Add(newReview);
+            await _dbContext.SaveChangesAsync();
 
-            if (updatedUser.Reviews is null)
-            {
-                updatedUser.Reviews = new List<Review>();
-            }
-            if (updatedHospital.Reviews is null)
-            {
-                updatedHospital.Reviews = new List<Review>();
-            }
-
+            var updatedHospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
+            updatedHospital.Reviews.Add(newReview);
+            var updatedUser = await _dbContext.Users.Include(r => r.Reviews).FirstOrDefaultAsync(r => r.Id == review.UserId);
             updatedHospital.Reviews.Add(newReview);
             updatedUser.Reviews.Add(newReview);
+
             UpdateAggregateRatings(updatedHospital); // Update the hospital's aggregate ratings after adding a new review.
-            _dbContext.Entry(updatedHospital).CurrentValues.SetValues(updatedHospital);
-            _dbContext.Entry(updatedUser).CurrentValues.SetValues(updatedUser);
             await _dbContext.SaveChangesAsync();
-            var resultReview = await _dbContext.Reviews.Include(r => r.User).Include(r => r.Hospital).FirstOrDefaultAsync(r => r.Id == newReview.Id);
+
+            var resultReview = await _dbContext.Reviews.FirstOrDefaultAsync(r => r.Id == newReview.Id);
             return Mapper.MapReview(resultReview);
         }
 
@@ -204,7 +194,7 @@ namespace TheGuardian.DataAccess
         /// <returns>A review</returns>
         public async Task<Core.Models.Review> GetReviewAsync(int id)
         {
-            var review = await _dbContext.Reviews.Include(r => r.Hospital).Include(r => r.User).FirstOrDefaultAsync(r => r.Id == id);
+            var review = await _dbContext.Reviews.FirstOrDefaultAsync(r => r.Id == id);
 
             if (review == null)
             {
@@ -222,7 +212,7 @@ namespace TheGuardian.DataAccess
         /// <returns>A List of reviews</returns>
         public async Task<IEnumerable<Core.Models.Review>> GetReviewsAsync()
         {
-            var reviews = await _dbContext.Reviews.Include(r => r.Hospital).Include(r => r.User).ToListAsync();
+            var reviews = await _dbContext.Reviews.ToListAsync();
             _logger.LogInformation("Fetched all reviews.");
             return reviews.Select(Mapper.MapReview);
         }
@@ -375,10 +365,29 @@ namespace TheGuardian.DataAccess
                 _logger.LogInformation($"Unable to update review with id {id} because it was not found.");
                 return null;
             }
+            Review changedReview = new Review
+            {
+                Id = reviewExists.Id,
+                UserId = reviewExists.UserId,
+                HospitalId = reviewExists.HospitalId,
+                MedicalStaffRating = review.MedicalStaffRating,
+                ClericalStaffRating = review.ClericalStaffRating,
+                FacilityRating = review.FacilityRating,
+                OverallRating = (review.MedicalStaffRating + review.ClericalStaffRating + review.FacilityRating) / 3.0,
+                DateAdmittance = review.DateAdmittance,
+                DateSubmitted = reviewExists.DateSubmitted,
+                WrittenFeedback = review.WrittenFeedback,
+                Reason = review.Reason,
+                ReasonOther = review.ReasonOther
+            };
             _logger.LogInformation($"Updating review with id {id}.");
-            review.OverallRating = (review.MedicalStaffRating + review.ClericalStaffRating + review.FacilityRating) / 3.0;
-            _dbContext.Entry(reviewExists).CurrentValues.SetValues(review);
+            _dbContext.Entry(reviewExists).CurrentValues.SetValues(changedReview);
             await _dbContext.SaveChangesAsync();
+
+            var updatedHospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
+            UpdateAggregateRatings(updatedHospital); // Update the hospital's aggregate ratings after adding a new review.
+            await _dbContext.SaveChangesAsync();
+
             return review;
         }
     }

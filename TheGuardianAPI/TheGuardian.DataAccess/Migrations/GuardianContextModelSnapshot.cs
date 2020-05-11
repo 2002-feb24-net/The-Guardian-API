@@ -676,13 +676,13 @@ namespace TheGuardian.DataAccess.Migrations
 
             modelBuilder.Entity("TheGuardian.DataAccess.Review", b =>
                 {
-                    b.HasOne("TheGuardian.DataAccess.Hospital", "Hospital")
+                    b.HasOne("TheGuardian.DataAccess.Hospital", null)
                         .WithMany("Reviews")
                         .HasForeignKey("HospitalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TheGuardian.DataAccess.User", "User")
+                    b.HasOne("TheGuardian.DataAccess.User", null)
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
