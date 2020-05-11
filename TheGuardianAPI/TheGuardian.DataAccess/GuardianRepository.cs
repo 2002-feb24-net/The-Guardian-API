@@ -88,30 +88,12 @@ namespace TheGuardian.DataAccess
                 User = user,
                 Hospital = hospital
             };
-            _logger.LogInformation("####### Returning to avoid errors... but her'es the review we're trying to add...");
-            //_logger.LogInformation(newReview.Id + ", " + newReview.UserId + ", " + newReview.HospitalId + ", " + newReview.UserId + ", " + newReview.MedicalStaffRating + ", " + newReview.ClericalStaffRating + ", " + newReview.FacilityRating + ", " + newReview.OverallRating + ", " + newReview.WrittenFeedback + ", " + newReview.Reason + ", " + newReview.ReasonOther + ", " + newReview.DateAdmittance + ", " + newReview.DateSubmitted + ", " + newReview.User.ToString() + ", " + newReview.Hospital.ToString());
-            return null;
-
-            var updatedUser = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == review.UserId);
-            var updatedHospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
 
             _logger.LogInformation($"Added a review from user with id {review.UserId} to hospital with id {review.HospitalId} to DB.");
             _dbContext.Reviews.Add(newReview);
-
-            if (updatedUser.Reviews is null)
-            {
-                updatedUser.Reviews = new List<Review>();
-            }
-            if (updatedHospital.Reviews is null)
-            {
-                updatedHospital.Reviews = new List<Review>();
-            }
-
-            updatedHospital.Reviews.Add(newReview);
-            updatedUser.Reviews.Add(newReview);
+            await _dbContext.SaveChangesAsync();
+            var updatedHospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
             UpdateAggregateRatings(updatedHospital); // Update the hospital's aggregate ratings after adding a new review.
-            _dbContext.Entry(updatedHospital).CurrentValues.SetValues(updatedHospital);
-            _dbContext.Entry(updatedUser).CurrentValues.SetValues(updatedUser);
             await _dbContext.SaveChangesAsync();
             var resultReview = await _dbContext.Reviews.Include(r => r.User).Include(r => r.Hospital).FirstOrDefaultAsync(r => r.Id == newReview.Id);
             return Mapper.MapReview(resultReview);
