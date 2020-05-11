@@ -22,4 +22,9 @@
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TheGuardian.Core\TheGuardian.Core.csproj" />
+    <ProjectReference Include="..\TheGuardian.DataAccess\TheGuardian.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
