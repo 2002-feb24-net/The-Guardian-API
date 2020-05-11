@@ -85,14 +85,24 @@ namespace TheGuardian.DataAccess
                 Reason = review.Reason,
                 DateAdmittance = review.DateAdmittance,
                 User = user,
-                Hospital = null
+                Hospital = hospital
             };
 
             _logger.LogInformation($"Added a review from user with id {review.UserId} to hospital with id {review.HospitalId} to DB.");
             _dbContext.Reviews.Add(newReview);
+            if (user.Reviews is null)
+            {
+                user.Reviews = new List<Review>();
+            }
+            if (hospital.Reviews is null)
+            {
+                hospital.Reviews = new List<Review>();
+            }
             user.Reviews.Add(newReview);
             hospital.Reviews.Add(newReview);
             UpdateAggregateRatings(hospital); // Update the hospital's aggregate ratings after adding a new review.
+            _dbContext.Entry(hospital).CurrentValues.SetValues(hospital);
+            _dbContext.Entry(user).CurrentValues.SetValues(user);
             await _dbContext.SaveChangesAsync();
             return Mapper.MapReview(newReview);
         }
