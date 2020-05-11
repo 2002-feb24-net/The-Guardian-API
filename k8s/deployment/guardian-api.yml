@@ -20,6 +20,7 @@ spec:
       containers:
       - name: guardian-api
         image: anvelez26/theguardianapi:1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         env:
