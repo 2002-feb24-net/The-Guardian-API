@@ -28,6 +28,10 @@ namespace TheGuardian.DataAccess
             var fileText = File.ReadAllText(@"../TheGuardian.DataAccess/Models/TexasHospitals.txt");
             // Deserialize JSON string.
             List<Hospital> hospitalsFromFile = JsonSerializer.Deserialize<List<Hospital>>(fileText);
+            foreach (var hospital in hospitalsFromFile)
+            {
+                Console.WriteLine("New hospital: " + hospital.Id + ", " + hospital.Name + ", " + hospital.Address + ", " + hospital.City + ", " + hospital.State + ", " + hospital.Zip + ", " + hospital.Phone + ", " + hospital.Website);
+            }
 
             User admin = new User
             {
@@ -65,18 +69,32 @@ namespace TheGuardian.DataAccess
             modelBuilder.Entity<Hospital>(entity =>
             {
                 entity.HasKey(h => h.Id);
-                entity.Property(h => h.Name).IsRequired().HasMaxLength(80);
-                entity.Property(h => h.Address).IsRequired().HasMaxLength(35);
+                entity.Property(h => h.Name).IsRequired().HasMaxLength(100);
+                entity.Property(h => h.Address).IsRequired().HasMaxLength(60);
                 entity.Property(h => h.City).IsRequired().HasMaxLength(25);
                 entity.Property(h => h.State).IsRequired().HasMaxLength(2);
                 entity.Property(h => h.Zip).IsRequired();
-                entity.Property(h => h.Phone).IsRequired().HasMaxLength(15);
+                entity.Property(h => h.Phone).IsRequired().HasMaxLength(20);
                 entity.Property(h => h.Website).IsRequired().HasMaxLength(100);
                 entity.Property(h => h.AggMedicalStaffRating).HasDefaultValue(1);
                 entity.Property(h => h.AggFacilityRating).HasDefaultValue(1);
                 entity.Property(h => h.AggClericalStaffRating).HasDefaultValue(1);
                 entity.Property(h => h.AggOverallRating).HasDefaultValue(1);
-                entity.HasData(hospitalsFromFile);
+                foreach (var hospital in hospitalsFromFile)
+                {
+                    entity.HasData(
+                        new Hospital
+                        {
+                            Id = hospital.Id,
+                            Name = hospital.Name,
+                            Address = hospital.Address,
+                            City = hospital.City,
+                            State = hospital.State,
+                            Zip = hospital.Zip,
+                            Phone = hospital.Phone,
+                            Website = hospital.Website
+                        });
+                }
             });
 
             modelBuilder.Entity<Review>(entity =>

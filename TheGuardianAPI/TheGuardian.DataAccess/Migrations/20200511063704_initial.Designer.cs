@@ -10,7 +10,7 @@ using TheGuardian.DataAccess;
 namespace TheGuardian.DataAccess.Migrations
 {
     [DbContext(typeof(GuardianContext))]
-    [Migration("20200511051651_initial")]
+    [Migration("20200511063704_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,8 +30,8 @@ namespace TheGuardian.DataAccess.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("character varying(35)")
-                        .HasMaxLength(35);
+                        .HasColumnType("character varying(60)")
+                        .HasMaxLength(60);
 
                     b.Property<double>("AggClericalStaffRating")
                         .ValueGeneratedOnAdd()
@@ -60,13 +60,13 @@ namespace TheGuardian.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(80)")
-                        .HasMaxLength(80);
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("character varying(15)")
-                        .HasMaxLength(15);
+                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(20);
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -90,10 +90,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 1,
                             Address = "621 North Hall Street",
-                            AggClericalStaffRating = 5.0,
-                            AggFacilityRating = 5.0,
-                            AggMedicalStaffRating = 5.0,
-                            AggOverallRating = 5.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Baylor Scott & White Heart and Vascular Hospital",
                             Phone = "(214) 820-0600",
@@ -105,10 +105,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 2,
                             Address = "2727 East Lemmon Ave.",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Baylor Scott & White Medical Center Uptown",
                             Phone = "(214) 443-3000",
@@ -120,10 +120,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 3,
                             Address = "3500 Gaston Street",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Baylor University Medical Center",
                             Phone = "(214) 820-0111",
@@ -135,10 +135,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 4,
                             Address = "9440 Poppy Drive",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "City Hospital at White Rock",
                             Phone = "(214) 324-6100",
@@ -150,10 +150,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 5,
                             Address = "7 Medical Parkway",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Dallas Medical Center",
                             Phone = "(972) 888-7000",
@@ -165,10 +165,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 6,
                             Address = "4500 South Lancaster Road",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Dallas VA Medical Center",
                             Phone = "(214) 742-8387",
@@ -180,10 +180,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 7,
                             Address = "7777 Forest Lane",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Medical City Dallas",
                             Phone = "(972) 566-700",
@@ -195,10 +195,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 8,
                             Address = "3500 West Wheatland Road",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Methodist Charlton Medical Center",
                             Phone = "(214) 947-7777",
@@ -210,10 +210,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 9,
                             Address = "1441 North Beckley Avenue",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Methodist Dallas Medical Center",
                             Phone = "(214) 947-8181",
@@ -225,10 +225,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 10,
                             Address = "9301 North Central Expressway Suite 100",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "North Central Surgical Center",
                             Phone = "(214) 265-2810",
@@ -240,10 +240,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 11,
                             Address = "5200 Harry Hines Boulevard",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Parkland Hospital",
                             Phone = "(214) 590-8000",
@@ -255,10 +255,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 12,
                             Address = "8200 Walnut Hill Lane",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Texas Health Dallas",
                             Phone = "(214) 345-6789",
@@ -270,10 +270,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 13,
                             Address = "7115 Greenville Avenue",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Texas Institute for Surgery",
                             Phone = "(214) 647-5300",
@@ -285,10 +285,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 14,
                             Address = "6201 Harry Hines Boulevard",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "William P. Clements Jr. University Hospital",
                             Phone = "(214) 633-5555",
@@ -300,10 +300,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 15,
                             Address = "5151 Harry Hines Boulevard",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Dallas",
                             Name = "Zale Lipshy Pavilion-William P. Clements Jr. University Hospital",
                             Phone = "(214) 645-5555",
@@ -315,10 +315,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 16,
                             Address = "707 Highlander Boulevard",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Arlington",
                             Name = "Baylor Scott & White Orthopedic and Spine Hospital Arlington",
                             Phone = "(855) 416-7846",
@@ -330,10 +330,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 17,
                             Address = "3301 Matlock Rd.",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Arlington",
                             Name = "Medical City Arlington",
                             Phone = "(817) 465-3241",
@@ -345,10 +345,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 18,
                             Address = "800 West Randol Mill Road",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Arlington",
                             Name = "Texas Health Arlington Medical Hospital",
                             Phone = "(817) 960-6100",
@@ -360,10 +360,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 19,
                             Address = "811 Wright Street",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Arlington",
                             Name = "Texas Health Heart & Vascular Hospital Arlington",
                             Phone = "(817) 960-3500",
@@ -375,10 +375,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 20,
                             Address = "801 West Interstate 20	Arlington",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Arlington",
                             Name = "USMD Hospital at Arlington",
                             Phone = "(817) 472-3400",
@@ -390,10 +390,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 21,
                             Address = "1400 Eighth Avenue",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "Baylor Scott & White All Saints Medical Center",
                             Phone = "(817) 926-2544",
@@ -405,10 +405,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 22,
                             Address = "1800 Park Place Avenue",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "Baylor Scott & White Surgical Hospital Fort Worth",
                             Phone = "(682) 703-5600",
@@ -420,10 +420,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 23,
                             Address = "1500 South Main Street",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "John Peter Smith Hospital",
                             Phone = "(817) 921-3431",
@@ -435,10 +435,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 24,
                             Address = "3101 North Tarrant Pkwy",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "Medical City Alliance",
                             Phone = "(817) 639-1000",
@@ -450,10 +450,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 25,
                             Address = "900 Eighth Avenue",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "Medical City Fort Worth",
                             Phone = "(817) 877-5292",
@@ -465,10 +465,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 26,
                             Address = "10864 Texas Health Trail",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "Texas Health Alliance",
                             Phone = "(682) 212-2000",
@@ -480,10 +480,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 27,
                             Address = "1301 Pennsylvania Avenue",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "Texas Health Fort Worth",
                             Phone = "(817) 250-2000",
@@ -495,10 +495,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 28,
                             Address = "6100 Harris Parkway",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "Texas Health Southwest",
                             Phone = "(817) 433-5000",
@@ -510,10 +510,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 29,
                             Address = "5900 Altamesa Boulevard",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "USMD Hospital at Fort Worth",
                             Phone = "(817) 433-9100",
@@ -525,10 +525,10 @@ namespace TheGuardian.DataAccess.Migrations
                         {
                             Id = 30,
                             Address = "3200 North Tarrant Parkway",
-                            AggClericalStaffRating = 1.0,
-                            AggFacilityRating = 1.0,
-                            AggMedicalStaffRating = 1.0,
-                            AggOverallRating = 1.0,
+                            AggClericalStaffRating = 0.0,
+                            AggFacilityRating = 0.0,
+                            AggMedicalStaffRating = 0.0,
+                            AggOverallRating = 0.0,
                             City = "Fort Worth",
                             Name = "Wise Health Surgical Hospital at Parkway",
                             Phone = "(817) 502-7300",
