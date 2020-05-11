@@ -25,9 +25,9 @@ namespace TheGuardian.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Read all text from file with Texas Hospitals in JSON format.
-            var fileText = File.ReadAllText(@"../TheGuardian.DataAccess/Models/TexasHospitals.txt");
+           // var fileText = File.ReadAllText(@"../TheGuardian.DataAccess/Models/TexasHospitals.txt");
             // Deserialize JSON string.
-            List<Hospital> hospitalsFromFile = JsonSerializer.Deserialize<List<Hospital>>(fileText);
+            //List<Hospital> hospitalsFromFile = JsonSerializer.Deserialize<List<Hospital>>(fileText);
 
             User admin = new User
             {
@@ -76,7 +76,7 @@ namespace TheGuardian.DataAccess
                 entity.Property(h => h.AggFacilityRating).HasDefaultValue(1);
                 entity.Property(h => h.AggClericalStaffRating).HasDefaultValue(1);
                 entity.Property(h => h.AggOverallRating).HasDefaultValue(1);
-                foreach (var hospital in hospitalsFromFile)
+                /*foreach (var hospital in hospitalsFromFile)
                 {
                     entity.HasData(
                         new Hospital
@@ -90,7 +90,7 @@ namespace TheGuardian.DataAccess
                             Phone = hospital.Phone,
                             Website = hospital.Website
                         });
-                }
+                }*/
             });
 
             modelBuilder.Entity<Review>(entity =>

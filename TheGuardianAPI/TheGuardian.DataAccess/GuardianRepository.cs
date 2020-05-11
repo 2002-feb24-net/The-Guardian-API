@@ -88,6 +88,9 @@ namespace TheGuardian.DataAccess
                 User = user,
                 Hospital = hospital
             };
+            _logger.LogInformation("####### Returning to avoid errors... but her'es the review we're trying to add...");
+            //_logger.LogInformation(newReview.Id + ", " + newReview.UserId + ", " + newReview.HospitalId + ", " + newReview.UserId + ", " + newReview.MedicalStaffRating + ", " + newReview.ClericalStaffRating + ", " + newReview.FacilityRating + ", " + newReview.OverallRating + ", " + newReview.WrittenFeedback + ", " + newReview.Reason + ", " + newReview.ReasonOther + ", " + newReview.DateAdmittance + ", " + newReview.DateSubmitted + ", " + newReview.User.ToString() + ", " + newReview.Hospital.ToString());
+            return null;
 
             var updatedUser = await _dbContext.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == review.UserId);
             var updatedHospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
