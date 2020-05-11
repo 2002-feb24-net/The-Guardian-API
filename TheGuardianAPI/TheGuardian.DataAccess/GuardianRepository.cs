@@ -365,10 +365,29 @@ namespace TheGuardian.DataAccess
                 _logger.LogInformation($"Unable to update review with id {id} because it was not found.");
                 return null;
             }
+            Review changedReview = new Review
+            {
+                Id = reviewExists.Id,
+                UserId = reviewExists.UserId,
+                HospitalId = reviewExists.HospitalId,
+                MedicalStaffRating = review.MedicalStaffRating,
+                ClericalStaffRating = review.ClericalStaffRating,
+                FacilityRating = review.FacilityRating,
+                OverallRating = (review.MedicalStaffRating + review.ClericalStaffRating + review.FacilityRating) / 3.0,
+                DateAdmittance = review.DateAdmittance,
+                DateSubmitted = reviewExists.DateSubmitted,
+                WrittenFeedback = review.WrittenFeedback,
+                Reason = review.Reason,
+                ReasonOther = review.ReasonOther
+            };
             _logger.LogInformation($"Updating review with id {id}.");
-            review.OverallRating = (review.MedicalStaffRating + review.ClericalStaffRating + review.FacilityRating) / 3.0;
-            _dbContext.Entry(reviewExists).CurrentValues.SetValues(review);
+            _dbContext.Entry(reviewExists).CurrentValues.SetValues(changedReview);
             await _dbContext.SaveChangesAsync();
+
+            var updatedHospital = await _dbContext.Hospitals.Include(h => h.Reviews).FirstOrDefaultAsync(h => h.Id == review.HospitalId);
+            UpdateAggregateRatings(updatedHospital); // Update the hospital's aggregate ratings after adding a new review.
+            await _dbContext.SaveChangesAsync();
+
             return review;
         }
     }
