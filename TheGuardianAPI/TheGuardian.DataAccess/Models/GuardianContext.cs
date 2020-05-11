@@ -28,10 +28,6 @@ namespace TheGuardian.DataAccess
             var fileText = File.ReadAllText(@"../TheGuardian.DataAccess/Models/TexasHospitals.txt");
             // Deserialize JSON string.
             List<Hospital> hospitalsFromFile = JsonSerializer.Deserialize<List<Hospital>>(fileText);
-            foreach (var hospital in hospitalsFromFile)
-            {
-                Console.WriteLine("New hospital: " + hospital.Id + ", " + hospital.Name + ", " + hospital.Address + ", " + hospital.City + ", " + hospital.State + ", " + hospital.Zip + ", " + hospital.Phone + ", " + hospital.Website);
-            }
 
             User admin = new User
             {

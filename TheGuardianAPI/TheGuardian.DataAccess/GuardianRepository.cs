@@ -66,9 +66,9 @@ namespace TheGuardian.DataAccess
             if (user is null || hospital is null)
             {
                 _logger.LogInformation($"Couldn't find hospital with ID {review.HospitalId} and/or user with ID {review.UserId}.");
+                return null;
             }
-            var reviewExists = await _dbContext.Reviews.FirstOrDefaultAsync(r => r.UserId == review.UserId && r.HospitalId == review.HospitalId);
-            if (reviewExists != null)
+            if (!(await _dbContext.Reviews.FirstOrDefaultAsync(r => r.UserId == review.UserId && r.HospitalId == review.HospitalId) is null))
             {
                 _logger.LogInformation($"User with id {review.UserId} already placed a review at hospital with id {review.HospitalId}.");
                 return null;
@@ -84,15 +84,15 @@ namespace TheGuardian.DataAccess
                 WrittenFeedback = review.WrittenFeedback,
                 Reason = review.Reason,
                 DateAdmittance = review.DateAdmittance,
-                User = user, 
-                Hospital = hospital
+                User = user,
+                Hospital = null
             };
 
             _logger.LogInformation($"Added a review from user with id {review.UserId} to hospital with id {review.HospitalId} to DB.");
             _dbContext.Reviews.Add(newReview);
             user.Reviews.Add(newReview);
             hospital.Reviews.Add(newReview);
-            //UpdateAggregateRatings(hospital); // Update the hospital's aggregate ratings after adding a new review.
+            UpdateAggregateRatings(hospital); // Update the hospital's aggregate ratings after adding a new review.
             await _dbContext.SaveChangesAsync();
             return Mapper.MapReview(newReview);
         }

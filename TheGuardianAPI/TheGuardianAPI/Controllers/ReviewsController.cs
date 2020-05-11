@@ -76,7 +76,6 @@ namespace TheGuardian.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
-            //return BadRequest("This method is currently non-functional");
             Core.Models.Review addedReview = await _repository.PostReviewAsync(Mapper.MapReview(review));
             if (addedReview == null)
             {
