@@ -155,6 +155,23 @@ namespace TheGuardian.DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClericalStaffRating = 5,
+                            DateAdmittance = new DateTime(2020, 5, 10, 20, 19, 23, 857, DateTimeKind.Local).AddTicks(2769),
+                            DateSubmitted = new DateTime(2020, 5, 10, 20, 19, 23, 859, DateTimeKind.Local).AddTicks(807),
+                            FacilityRating = 5,
+                            HospitalId = 1,
+                            MedicalStaffRating = 5,
+                            OverallRating = 5.0,
+                            Reason = "Surgery",
+                            ReasonOther = "",
+                            UserId = 1,
+                            WrittenFeedback = "Extremely satisfactory surgery. Five stars."
+                        });
                 });
 
             modelBuilder.Entity("TheGuardian.DataAccess.User", b =>

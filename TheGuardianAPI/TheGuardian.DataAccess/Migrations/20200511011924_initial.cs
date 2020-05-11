@@ -99,6 +99,11 @@ namespace TheGuardian.DataAccess.Migrations
                 columns: new[] { "Id", "AccessLevel", "AccountVerified", "Address", "City", "Email", "FirstName", "LastName", "Password", "State", "Zip" },
                 values: new object[] { 1, true, true, "1001 S Center St", "Arlington", "superadmin@gmail.com", "Super", "Admin", "R3vTra1n1ng", "TX", 76010 });
 
+            migrationBuilder.InsertData(
+                table: "Reviews",
+                columns: new[] { "Id", "ClericalStaffRating", "DateAdmittance", "DateSubmitted", "FacilityRating", "HospitalId", "MedicalStaffRating", "OverallRating", "Reason", "ReasonOther", "UserId", "WrittenFeedback" },
+                values: new object[] { 1, 5, new DateTime(2020, 5, 10, 20, 19, 23, 857, DateTimeKind.Local).AddTicks(2769), new DateTime(2020, 5, 10, 20, 19, 23, 859, DateTimeKind.Local).AddTicks(807), 5, 1, 5, 5.0, "Surgery", "", 1, "Extremely satisfactory surgery. Five stars." });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_HospitalId",
                 table: "Reviews",

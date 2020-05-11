@@ -102,6 +102,7 @@ namespace TheGuardian.DataAccess
                 DateSubmitted = review.DateSubmitted,
                 DateAdmittance = review.DateAdmittance,
                 Reason = review.Reason,
+                ReasonOther = review.ReasonOther,
                 User = MapUser(review.User),
                 Hospital = MapHospital(review.Hospital)
             };
@@ -122,6 +123,7 @@ namespace TheGuardian.DataAccess
                 DateSubmitted = review.DateSubmitted,
                 DateAdmittance = review.DateAdmittance,
                 Reason = review.Reason,
+                ReasonOther = review.ReasonOther,
                 User = MapUser(review.User),
                 Hospital = MapHospital(review.Hospital)
             };

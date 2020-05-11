@@ -68,31 +68,12 @@ namespace TheGuardian.DataAccess
                 WrittenFeedback = "Extremely satisfactory surgery. Five stars.",
                 Reason = "Surgery",
                 ReasonOther = "",
-                Hospital = newHospital,
-                User = admin
+                Hospital = null,
+                User = null
             };
 
             //admin.Reviews.Add(newReview);
             //newHospital.Reviews.Add(newReview);
-
-            modelBuilder.Entity<Review>(entity =>
-            {
-                entity.HasKey(r => r.Id);
-                entity.Property(r => r.UserId).IsRequired();
-                entity.Property(r => r.HospitalId).IsRequired();
-                entity.HasOne(r => r.User).WithMany(r => r.Reviews).HasForeignKey(r => r.UserId);
-                entity.HasOne(r => r.Hospital).WithMany(r => r.Reviews).HasForeignKey(r => r.HospitalId);
-                entity.Property(r => r.DateAdmittance).IsRequired().HasColumnType("timestamp");
-                entity.Property(r => r.DateSubmitted).HasColumnType("timestamp").HasDefaultValueSql("now()");
-                entity.Property(r => r.MedicalStaffRating).IsRequired();
-                entity.Property(r => r.ClericalStaffRating).IsRequired();
-                entity.Property(r => r.FacilityRating).IsRequired();
-                entity.Property(r => r.OverallRating).IsRequired();
-                entity.Property(r => r.WrittenFeedback).IsRequired().HasMaxLength(500);
-                entity.Property(r => r.Reason).IsRequired().HasMaxLength(12);
-                entity.Property(r => r.ReasonOther).HasMaxLength(50);
-                //entity.HasData(newReview);
-            });
 
             modelBuilder.Entity<User>(entity =>
             {
@@ -126,6 +107,25 @@ namespace TheGuardian.DataAccess
                 entity.Property(h => h.AggClericalStaffRating).HasDefaultValue(1);
                 entity.Property(h => h.AggOverallRating).HasDefaultValue(1);
                 entity.HasData(newHospital);
+            });
+
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.HasKey(r => r.Id);
+                entity.Property(r => r.UserId).IsRequired();
+                entity.Property(r => r.HospitalId).IsRequired();
+                entity.HasOne(r => r.User).WithMany(r => r.Reviews).HasForeignKey(r => r.UserId);
+                entity.HasOne(r => r.Hospital).WithMany(r => r.Reviews).HasForeignKey(r => r.HospitalId);
+                entity.Property(r => r.DateAdmittance).IsRequired().HasColumnType("timestamp");
+                entity.Property(r => r.DateSubmitted).HasColumnType("timestamp").HasDefaultValueSql("now()");
+                entity.Property(r => r.MedicalStaffRating).IsRequired();
+                entity.Property(r => r.ClericalStaffRating).IsRequired();
+                entity.Property(r => r.FacilityRating).IsRequired();
+                entity.Property(r => r.OverallRating).IsRequired();
+                entity.Property(r => r.WrittenFeedback).IsRequired().HasMaxLength(500);
+                entity.Property(r => r.Reason).IsRequired().HasMaxLength(12);
+                entity.Property(r => r.ReasonOther).HasMaxLength(50);
+                entity.HasData(newReview);
             });
 
             Console.WriteLine("Well hello there!");
