@@ -68,11 +68,11 @@ namespace TheGuardian.DataAccess
                 _logger.LogInformation($"Couldn't find hospital with ID {review.HospitalId} and/or user with ID {review.UserId}.");
                 return null;
             }
-            if (!(await _dbContext.Reviews.FirstOrDefaultAsync(r => r.UserId == user.Id && r.HospitalId == hospital.Id) is null))
+            /*if (!(await _dbContext.Reviews.FirstOrDefaultAsync(r => r.UserId == user.Id && r.HospitalId == hospital.Id) is null))
             {
                 _logger.LogInformation($"User with id {review.UserId} already placed a review at hospital with id {review.HospitalId}.");
                 return null;
-            }
+            }*/
             Review newReview = new Review
             {
                 UserId = review.UserId,
