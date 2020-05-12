@@ -54,13 +54,7 @@ namespace TheGuardian.Api.Controllers
         {
             if (await _repository.GetUserLoginAsync(email, password) is Core.Models.User user)
             {
-
-                if (user == null)
-                {
-                    return NotFound();
-                }
                 return Ok(Mapper.MapUser(user));
-
             }
             else
             {
