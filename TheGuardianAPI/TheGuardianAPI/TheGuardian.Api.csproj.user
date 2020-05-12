@@ -10,6 +10,6 @@
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
-    <WebStackScaffolding_DbContextTypeFullName>TheGuardian.DataAccess.GuardianContext</WebStackScaffolding_DbContextTypeFullName>
+    <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
 </Project>
