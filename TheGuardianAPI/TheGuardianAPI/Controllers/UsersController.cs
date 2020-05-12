@@ -46,7 +46,7 @@ namespace TheGuardian.Api.Controllers
         }
 
         // GET: api/Users/email
-        [HttpGet("{email}, {password}")]
+        [HttpGet("{email}/{password}")]
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
