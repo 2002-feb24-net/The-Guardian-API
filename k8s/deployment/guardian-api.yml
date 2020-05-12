@@ -38,5 +38,9 @@ spec:
           value: https://theguardian.azurewebsites.net
         - name: CorsOrigins__5
           value: http://ab1a2117c7bfa4faca874e19c4a85fe1-856933387.us-east-2.elb.amazonaws.com
+          - name: CorsOrigins__7
+          value: http://guardian-api.2002.revaturelabs.com
+        - name: CorsOrigins__8
+          value: https://guardian.2002.revaturelabs.com
         - name: UseHttpsRedirection
           value: 'false'
