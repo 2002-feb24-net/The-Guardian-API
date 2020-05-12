@@ -38,5 +38,7 @@ namespace TheGuardian.Core.Interfaces
 
         Task<bool> RemoveReviewAsync(int id);
 
+        Task<User> GetUserLoginAsync(string email, string password);
+
     }
 }

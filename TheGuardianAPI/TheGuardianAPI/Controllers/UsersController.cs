@@ -52,23 +52,19 @@ namespace TheGuardian.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<User>> GetUser(string email, string password)
         {
-            /*
-             Core.Models.User user = await _repository.GetUserAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(Mapper.MapUser(user));
-            */
-
             if (await _repository.GetUserLoginAsync(email, password) is Core.Models.User user)
             {
+
                 if (user == null)
                 {
                     return NotFound();
                 }
                 return Ok(Mapper.MapUser(user));
 
+            }
+            else
+            {
+                return NotFound();
             }
         }
 
