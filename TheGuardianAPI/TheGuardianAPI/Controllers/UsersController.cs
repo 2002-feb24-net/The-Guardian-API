@@ -45,6 +45,33 @@ namespace TheGuardian.Api.Controllers
             return Ok(Mapper.MapUser(user));
         }
 
+        // GET: api/Users/email
+        [HttpGet("{email}, {password}")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<User>> GetUser(string email, string password)
+        {
+            /*
+             Core.Models.User user = await _repository.GetUserAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(Mapper.MapUser(user));
+            */
+
+            if (await _repository.GetUserLoginAsync(email, password) is Core.Models.User user)
+            {
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(Mapper.MapUser(user));
+
+            }
+        }
+
         // PUT: api/Users/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

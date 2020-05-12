@@ -247,6 +247,18 @@ namespace TheGuardian.DataAccess
         }
 
         /// <summary>
+        /// Retreiving a single user from the DB for login
+        /// </summary>
+        /// <returns>A single user</returns>
+        public async Task<Core.Models.User> GetUserLoginAsync(string email, string password)
+        {
+            TheGuardian.DataAccess.User user = await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+
+            return Mapper.MapUser(user);
+        }
+
+        /// <summary>
         /// Removing Hospital and associated reviews from DB based on ID
         /// </summary>
         /// <param name="id"></param>
