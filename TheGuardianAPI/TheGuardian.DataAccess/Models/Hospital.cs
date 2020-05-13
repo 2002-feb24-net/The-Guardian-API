@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TheGuardian.DataAccess
-{ 
+{
     public class Hospital
     {
         public int Id { get; set; }
@@ -16,7 +13,7 @@ namespace TheGuardian.DataAccess
         public int Zip { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
-        [Range(1.00,5.00)]
+        [Range(1.00, 5.00)]
         public double AggMedicalStaffRating { get; set; }
         [Range(1.00, 5.00)]
         public double AggClericalStaffRating { get; set; }

@@ -1,13 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TheGuardian.Core.Interfaces;
-using TheGuardian.Core.Models;
+
 
 namespace TheGuardian.DataAccess
 {

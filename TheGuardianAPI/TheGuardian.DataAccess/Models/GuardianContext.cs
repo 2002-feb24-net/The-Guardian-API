@@ -1,13 +1,10 @@
-﻿using System;
-using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
+
 
 namespace TheGuardian.DataAccess
-{ 
-    public partial class GuardianContext: DbContext
+{
+    public partial class GuardianContext : DbContext
     {
         public GuardianContext()
         {
@@ -61,7 +58,7 @@ namespace TheGuardian.DataAccess
                 entity.Property(u => u.AccountVerified).HasDefaultValue(false);
                 entity.HasData(admin);
             });
-            
+
             modelBuilder.Entity<Hospital>(entity =>
             {
                 entity.HasKey(h => h.Id);
