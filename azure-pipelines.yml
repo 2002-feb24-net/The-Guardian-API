@@ -53,6 +53,9 @@ stages:
         organization: '2002-feb24-net'
         scannerMode: 'MSBuild'
         projectKey: 'theguardian'
+        projectName: 'The-Guardian-API'
+        extraProperties: 'sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/*/coverage.opencover.xml'
+      displayName: sonarcloud analysis prepare
     - task: UseDotNet@2
       inputs:
         packageType: sdk
