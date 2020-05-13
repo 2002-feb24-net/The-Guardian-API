@@ -1,13 +1,9 @@
 using System;
 using Xunit;
 using Moq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using TheGuardian.Core.Interfaces;
 using TheGuardian.Api.Controllers;
-using TheGuardianAPI;
-using TheGuardian.Core.Models;
 using FluentAssertions;
 using TheGuardian.DataAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,10 +11,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TheGuardianAPI.Test
 {
-    [TestClass]
     public class HospitalTest
     {
-        [TestMethod]
+        [Fact]
         public async Task GetHospitalsTest()
         {
             var listOfHospitals = new TheGuardian.Core.Models.Hospital();
@@ -45,8 +40,6 @@ namespace TheGuardianAPI.Test
             var hospitalsController = new HospitalsController(mockIGuardianRepository.Object);
             var allHospitals = await hospitalsController.GetHospitals();
             allHospitals.Should().NotBeNull();
-
-
         }
 
 
