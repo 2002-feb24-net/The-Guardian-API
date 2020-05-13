@@ -64,25 +64,25 @@ stages:
       workingDirectory: $(solutionPath)
       displayName: dotnet build
 
-    # - script: dotnet test
-    #     --configuration $(buildConfiguration)
-    #     --logger trx
-    #     --no-build
-    #     --results-directory $(Common.TestResultsDirectory)
-    #     --settings coverlet.runsettings
-    #   workingDirectory: $(solutionPath)
-    #   continueOnError: true
-    #   displayName: dotnet test
+    - script: dotnet test
+        --configuration $(buildConfiguration)
+        --logger trx
+        --no-build
+        --results-directory $(Common.TestResultsDirectory)
+        --settings coverlet.runsettings
+      workingDirectory: $(solutionPath)
+      continueOnError: true
+      displayName: dotnet test
 
     - task: SonarCloudAnalyze@1
       displayName: sonarcloud analysis run
 
-    # - task: PublishTestResults@2
-    #   condition: succeededOrFailed()
-    #   inputs:
-    #     testRunner: VSTest
-    #     testResultsFiles: $(Common.TestResultsDirectory)/*.trx
-    #   displayName: test results build publish
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: $(Common.TestResultsDirectory)/*.trx
+      displayName: test results build publish
 
     - task: PublishCodeCoverageResults@1
       condition: succeededOrFailed()
