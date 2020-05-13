@@ -19,7 +19,7 @@ namespace TheGuardianAPI.Test
     public class HospitalTest
     {
         [TestMethod]
-        public void GetHospitals()
+        public async Task GetHospitalsTest()
         {
             var listOfHospitals = new TheGuardian.Core.Models.Hospital();
             listOfHospitals = new TheGuardian.Core.Models.Hospital
@@ -41,9 +41,12 @@ namespace TheGuardianAPI.Test
 
             var a = Mapper.MapHospital(listOfHospitals);
             Mock<IGuardianRepository> mockIGuardianRepository = new Mock<IGuardianRepository>();
-            mockIGuardianRepository.Setup(x => x.GetUsersAsync()).Verifiable();
+            mockIGuardianRepository.Setup(x => x.GetHospitalsAsync()).Verifiable();
             var hospitalsController = new HospitalsController(mockIGuardianRepository.Object);
-            hospitalsController.Should().NotBeNull();
+            var allHospitals = await hospitalsController.GetHospitals();
+            allHospitals.Should().NotBeNull();
+
+
         }
 
 
