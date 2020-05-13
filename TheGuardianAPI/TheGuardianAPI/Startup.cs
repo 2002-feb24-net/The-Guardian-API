@@ -83,7 +83,7 @@ namespace TheGuardianAPI {
 
             app.UseRouting ();
 
-            app.UseCors (CorsPolicyName);
+            app.UseCors ("AllowConfiguredOrigins");
 
             app.UseAuthorization ();
 
