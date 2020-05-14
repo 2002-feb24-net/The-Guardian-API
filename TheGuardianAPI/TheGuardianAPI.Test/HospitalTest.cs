@@ -7,12 +7,23 @@ using TheGuardian.Api.Controllers;
 using FluentAssertions;
 using TheGuardian.DataAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TheGuardian.Core.Models;
+
 
 
 namespace TheGuardianAPI.Test
 {
     public class HospitalTest
     {
+        Mock<IGuardianRepository> mockIGuardianRepository;
+        HospitalsController hospitalsController;
+
+        public HospitalTest()
+        {
+            mockIGuardianRepository = new Mock<IGuardianRepository>();
+            hospitalsController = new HospitalsController(mockIGuardianRepository.Object);
+        }
+
         [Fact]
         public async Task GetHospitalsTest()
         {
@@ -40,6 +51,29 @@ namespace TheGuardianAPI.Test
             var hospitalsController = new HospitalsController(mockIGuardianRepository.Object);
             var allHospitals = await hospitalsController.GetHospitals();
             allHospitals.Should().NotBeNull();
+        }
+
+        public async void PostHospitalTest()
+        {
+            TheGuardian.DataAccess.Hospital listOfHospitals = new TheGuardian.DataAccess.Hospital
+            {
+                Id = 1,
+                Name = "TestName",
+                Address = "TestAddress",
+                City = "City",
+                State = "State",
+                Zip = 11010,
+                Phone = "5164911125",
+                Website = "TestHospital.com",
+                AggClericalStaffRating = 5,
+                AggFacilityRating = 5,
+                AggMedicalStaffRating = 5,
+                AggOverallRating = 5,
+
+            };
+            mockIGuardianRepository.Setup(x => x.PostHospitalAsync(Mapper.MapHospital(listOfHospitals))).Verifiable();
+            var postResult = await hospitalsController.PostHospital(listOfHospitals);
+            postResult.Result.Should().Equals(listOfHospitals);
         }
 
 
