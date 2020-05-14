@@ -1,15 +1,9 @@
 ﻿using Xunit;
 using TheGuardian.Api.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Moq;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using TheGuardian.Core.Interfaces;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using TheGuardian.Core.Models;
 using TheGuardian.DataAccess;
 
 namespace TheGuardian.Test
