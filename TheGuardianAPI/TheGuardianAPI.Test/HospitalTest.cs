@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 using Moq;
 using System.Threading.Tasks;
@@ -6,10 +5,7 @@ using TheGuardian.Core.Interfaces;
 using TheGuardian.Api.Controllers;
 using FluentAssertions;
 using TheGuardian.DataAccess;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TheGuardian.Core.Models;
-
-
+using Microsoft.AspNetCore.Mvc;
 
 namespace TheGuardianAPI.Test
 {
@@ -53,6 +49,7 @@ namespace TheGuardianAPI.Test
             allHospitals.Should().NotBeNull();
         }
 
+        [Fact]
         public async void PostHospitalTest()
         {
             TheGuardian.DataAccess.Hospital listOfHospitals = new TheGuardian.DataAccess.Hospital
@@ -76,6 +73,20 @@ namespace TheGuardianAPI.Test
             postResult.Result.Should().Equals(listOfHospitals);
         }
 
+        [Fact]
+        public async void GetHospitalTest()
+        {
+            mockIGuardianRepository.Setup(x => x.GetHospitalAsync(-1)).Verifiable();
+            var nullHospital = await hospitalsController.GetHospital(-1);
+            nullHospital.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async void DeleteHospital()
+        {
+            var deleteResult = await hospitalsController.DeleteHospital(1);
+            deleteResult.Should().BeOfType<NotFoundResult>();
+        }
 
     }
 
